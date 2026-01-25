@@ -742,7 +742,7 @@
                 <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </div>
+        </div>
             <div class="resume-badge">PDF</div>
           </div>
           <div class="resume-card-body">
@@ -780,7 +780,12 @@
   <div class="system-design-dropdown" id="projectsDropdown">
     <div class="dropdown-content">
       <div class="dropdown-header">
-        <h3>System Design</h3>
+        <div class="header-title-wrapper">
+          <h3>System Design</h3>
+          <button class="view-details-link" id="frameworkModalToggle" aria-label="View Framework">
+            Click To View Details
+          </button>
+        </div>
         <button class="close-btn" id="closeDropdown">&times;</button>
       </div>
       <div class="projects-list-dropdown" id="projectsListDropdown">
@@ -801,6 +806,75 @@
     </div>
   </div>
 
+  <!-- Framework Modal -->
+  <div class="framework-modal" id="frameworkModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>System Design Framework</h3>
+        <button class="modal-close-btn" id="closeFrameworkModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="framework-intro">
+          <p class="framework-description">
+            When designing the system, especially in the interviews, you need to make sure that you are not lost into the one concept and keep rambling around that concept for long. To prevent from hallucinations or stay away from the situation where one gets too deep into one concept and apparently waste all their time on one thing, there is a framework that almost all candidates follow to design the system completely and successfully.
+          </p>
+          <div class="framework-image-container">
+            <img src="system-design-framework.png" alt="System Design Framework Flowchart" class="framework-image" />
+          </div>
+        </div>
+        
+        <div class="framework-sections">
+          <div class="framework-section">
+            <h4 class="framework-section-title">Requirements</h4>
+            <div class="framework-subsection">
+              <h5 class="framework-subsection-title">Functional Requirements</h5>
+              <p class="framework-text">These requirements should focus on the High Level Design and should be enough to create a functional software despite considering the optimisation, scalability and similar kind of factors.</p>
+            </div>
+            <div class="framework-subsection">
+              <h5 class="framework-subsection-title">Non-Functional Requirements</h5>
+              <p class="framework-text">These requirements should focus on Deep Dives that includes an optimisation of the High Level (Functional) System.</p>
+              <p class="framework-text">We need to think about the category of the system →</p>
+              <ul class="framework-list">
+                <li>Scalable reads</li>
+                <li>Scalable writes</li>
+                <li>Maybe Both of them</li>
+              </ul>
+              <p class="framework-text">Which individual properties should we focus on from CAP theorem →</p>
+              <ul class="framework-list">
+                <li><strong>C</strong> → Consistency</li>
+                <li><strong>A</strong> → Availability</li>
+                <li><strong>P</strong> → Partition Tolerance</li>
+              </ul>
+              <p class="framework-text">There is one key concept that I have found very common in system design questions. Most of the time, we tend to create a distributed architecture, and for distributed environments we can't risk the Partition Tolerance property. Because if it occurs then the nodes won't be able to communicate with each other and so forth.</p>
+            </div>
+          </div>
+
+          <div class="framework-section">
+            <h4 class="framework-section-title">Entities</h4>
+            <p class="framework-text">We need to identify the core entities required which helps us to build a basic Data Model and build the structure of API's request, response bodies.</p>
+          </div>
+
+          <div class="framework-section">
+            <h4 class="framework-section-title">API as an interface</h4>
+            <p class="framework-text">In most cases, we choose REST API to know how the user's interact with our system</p>
+          </div>
+
+          <div class="framework-section">
+            <h4 class="framework-section-title">High Level Design</h4>
+            <p class="framework-text">Here, you'll connect the dots of all the preceding building block that we've just studied. Now the High Level System should be functional enough to meet functional requirements. It does not need to think about optimisations and stuff</p>
+          </div>
+
+          <div class="framework-section">
+            <h4 class="framework-section-title">Deep Dives</h4>
+            <p class="framework-text">After creating the High Level Design, you focus on the non-functional requirements which helps you scale the system and you align your system with non-functional requirements</p>
+            <p class="framework-text">You will have an idea of each of the building blocks in detail by having a look at one of the examples</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Projects Data with Categories
     const projects = [
@@ -808,6 +882,7 @@
         title: "URL Shortener",
         description: "Scalable URL shortening service with analytics and high availability",
         category: "system-design",
+        badge: "Scaling READ",
         githubUrl: "https://github.com/yourname/system-design-url-shortener"
       }
       // Add more projects here with category field
@@ -857,7 +932,7 @@
           <div class="project-item-content">
             <div class="project-item-header">
               <h4>${project.title}</h4>
-              <span class="project-badge">System Design</span>
+              <span class="project-badge">${project.badge || 'System Design'}</span>
             </div>
             <p>${project.description}</p>
           </div>
@@ -918,11 +993,43 @@
       searchInput.addEventListener('input', () => {
         updateProjects();
       });
+
+      // Framework Modal functionality
+      const frameworkModal = document.getElementById('frameworkModal');
+      const frameworkModalToggle = document.getElementById('frameworkModalToggle');
+      const closeFrameworkModal = document.getElementById('closeFrameworkModal');
+      const modalOverlay = frameworkModal.querySelector('.modal-overlay');
+
+      frameworkModalToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        frameworkModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      });
+
+      closeFrameworkModal.addEventListener('click', () => {
+        frameworkModal.classList.remove('show');
+        document.body.style.overflow = '';
+      });
+
+      modalOverlay.addEventListener('click', () => {
+        frameworkModal.classList.remove('show');
+        document.body.style.overflow = '';
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && frameworkModal.classList.contains('show')) {
+          frameworkModal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      });
     });
 
     // Close on Escape key
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && dropdown.classList.contains('show')) {
+      const dropdown = document.getElementById('projectsDropdown');
+      if (e.key === 'Escape' && dropdown && dropdown.classList.contains('show')) {
         dropdown.classList.remove('show');
       }
     });
@@ -1008,6 +1115,51 @@
       align-items: center;
       padding: 1.5rem 1.5rem 1rem;
       border-bottom: none;
+    }
+
+    .header-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .view-details-link {
+      background: none;
+      border: none;
+      color: #d97706;
+      cursor: pointer;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: 'Poppins', sans-serif;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      line-height: 1.2;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      letter-spacing: -0.01em;
+    }
+
+    .view-details-link:hover {
+      color: #f59e0b;
+      background: rgba(254, 249, 230, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .view-details-link:active {
+      transform: translateY(0);
+    }
+
+    [data-theme="dark"] .view-details-link {
+      color: #a78bfa;
+    }
+
+    [data-theme="dark"] .view-details-link:hover {
+      color: #c4b5fd;
+      background: rgba(139, 92, 246, 0.2);
     }
 
     /* Category Tabs - Square Boxes */
@@ -1149,6 +1301,259 @@
       color: var(--text-primary);
       letter-spacing: -0.02em;
       margin: 0;
+    }
+
+    /* Framework Modal Styles */
+    .framework-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .framework-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    [data-theme="dark"] .modal-overlay {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+      position: relative;
+      background: var(--bg-card);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 900px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .modal-content {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .framework-modal.show .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 1.5rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    /* Framework Content Styles */
+    .framework-content {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .framework-intro {
+      margin-bottom: 2rem;
+    }
+
+    .framework-description {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .framework-image-container {
+      width: 100%;
+      margin: 1.5rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .framework-image {
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+      .framework-image {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .framework-image-container {
+        padding: 0.75rem;
+      }
+
+      .framework-image {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    .framework-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .framework-section {
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .framework-section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .framework-section-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .framework-subsection {
+      margin-bottom: 1.25rem;
+    }
+
+    .framework-subsection:last-child {
+      margin-bottom: 0;
+    }
+
+    .framework-subsection-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .framework-subsection-title:first-child {
+      margin-top: 0;
+    }
+
+    .framework-text {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .framework-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .framework-list {
+      margin: 0.75rem 0 1rem 1.5rem;
+      padding: 0;
+      list-style-type: disc;
+    }
+
+    .framework-list li {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .framework-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .framework-list li strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] .framework-image-container {
+      background: #1a1a1a;
+      border-color: var(--border);
+    }
+
+    [data-theme="dark"] .framework-content {
+      background: var(--bg-card);
     }
 
     .close-btn {
@@ -1427,6 +1832,15 @@
         font-size: 1.25rem;
       }
 
+      .view-details-link {
+        font-size: 0.8125rem;
+        padding: 0.4rem 0.625rem;
+      }
+
+      .header-title-wrapper {
+        gap: 0.625rem;
+      }
+
       .search-container-dropdown {
         padding: 0.875rem 1.25rem;
       }
@@ -1451,6 +1865,28 @@
       .projects-list-dropdown {
         padding: 0 1.25rem 1.25rem;
       }
+
+      .framework-content {
+        padding: 1.25rem;
+        max-height: 50vh;
+      }
+
+      .framework-section-title {
+        font-size: 1.125rem;
+      }
+
+      .framework-subsection-title {
+        font-size: 0.9375rem;
+      }
+
+      .framework-text,
+      .framework-list li {
+        font-size: 0.875rem;
+      }
+
+      .framework-description {
+        font-size: 0.875rem;
+      }
     }
 
     @media (max-width: 576px) {
@@ -1468,6 +1904,79 @@
 
       .category-label {
         font-size: 0.6875rem;
+      }
+
+      .view-details-link {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.5rem;
+      }
+
+      .header-title-wrapper {
+        gap: 0.5rem;
+      }
+
+      .framework-content {
+        padding: 1rem;
+        max-height: 45vh;
+      }
+
+      .framework-section-title {
+        font-size: 1rem;
+      }
+
+      .framework-subsection-title {
+        font-size: 0.875rem;
+      }
+
+      .framework-text,
+      .framework-list li {
+        font-size: 0.8125rem;
+      }
+
+      .framework-description {
+        font-size: 0.8125rem;
+      }
+
+      .framework-image-container {
+        padding: 0.75rem;
+      }
+
+      .modal-content {
+        width: 95%;
+        max-height: 95vh;
+        border-radius: 16px;
+      }
+
+      .modal-header {
+        padding: 1.25rem 1.25rem 0.875rem;
+      }
+
+      .modal-header h3 {
+        font-size: 1.25rem;
+      }
+
+      .modal-body {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        border-radius: 16px;
+      }
+
+      .modal-header {
+        padding: 1.25rem 1.25rem 0.875rem;
+      }
+
+      .modal-header h3 {
+        font-size: 1.25rem;
+      }
+
+      .modal-body {
+        padding: 1.25rem;
       }
     }
   </style>
