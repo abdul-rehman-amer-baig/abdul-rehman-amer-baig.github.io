@@ -277,6 +277,15 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// Favicon by theme (light = black on cream, dark = purple on dark)
+const FAVICON_LIGHT = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23fef9e6'/%3E%3Ccircle cx='24' cy='14' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='13' cy='34' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='35' cy='34' r='3.25' fill='%23d97706'/%3E%3Cpath d='M24 17.25v6.5M24 23.75l-9 3.25M24 23.75l9 3.25' stroke='%23d97706' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E";
+const FAVICON_DARK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23151515'/%3E%3Ccircle cx='24' cy='14' r='3.25' fill='%23c4b5fd'/%3E%3Ccircle cx='13' cy='34' r='3.25' fill='%23c4b5fd'/%3E%3Ccircle cx='35' cy='34' r='3.25' fill='%23c4b5fd'/%3E%3Cpath d='M24 17.25v6.5M24 23.75l-9 3.25M24 23.75l9 3.25' stroke='%23c4b5fd' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E";
+
+function setFavicon(theme) {
+  const link = document.getElementById('favicon');
+  if (link) link.href = theme === 'dark' ? FAVICON_DARK : FAVICON_LIGHT;
+}
+
 // Theme Toggle Functionality
 const themeToggle = document.getElementById('themeToggle');
 if (themeToggle) {
@@ -285,6 +294,7 @@ if (themeToggle) {
   const currentTheme = localStorage.getItem('theme') || 'light';
   html.setAttribute('data-theme', currentTheme);
   updateThemeIcon(currentTheme, themeIcon);
+  setFavicon(currentTheme);
 
   themeToggle.addEventListener('click', () => {
     const t = html.getAttribute('data-theme');
@@ -292,6 +302,7 @@ if (themeToggle) {
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme, themeIcon);
+    setFavicon(newTheme);
   });
 }
 
