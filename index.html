@@ -22,6 +22,14 @@
 
 
 <body>
+  <nav class="topnav" id="topNav">
+    <div class="topnav-inner">
+      <a href="#aboutSection" class="topnav-link active" data-section="aboutSection">About</a>
+      <a href="#awardsSection" class="topnav-link" data-section="awardsSection">Awards</a>
+      <a href="#projectsSection" class="topnav-link" data-section="projectsSection">Projects</a>
+    </div>
+  </nav>
+
   <main class="container py-5">
     <header class="mb-5 pt-4">
       <div class="d-flex justify-content-between align-items-start mb-3">
@@ -48,183 +56,209 @@
       </div>
     </header>
 
-    <section class="mb-4">
-      <a href="resume.pdf" target="_blank" class="resume-link">
-        <div class="resume-card">
-          <div class="resume-card-header">
-            <div class="resume-icon-wrapper">
-              <svg class="resume-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-        </div>
-            <div class="resume-badge">PDF</div>
+    <!-- About -->
+    <section class="mb-5" id="aboutSection">
+      <div class="about-card">
+        <p class="about-text">Software Engineer at <strong>CloudEva Tech</strong>, where I lead <strong>end-to-end backend development</strong> across multiple products — from healthcare MVPs to serverless analytics platforms. I build with Python, FastAPI, and PostgreSQL, and work hands-on with AWS services and third-party integrations like Stripe and Firebase. I enjoy diving into existing codebases — spotting weaknesses, optimizing queries, and refining architecture. I also authored internal <strong>backend best-practice documentation</strong> that was adopted across the engineering team, because I believe great software is built on shared knowledge.</p>
+        <div class="about-highlights-row">
+          <div class="about-highlight">
+            <img src="cloudeva_logo.jpeg" alt="CloudEva Tech" class="about-highlight-logo" />
+            <span class="about-highlight-text">Software Engineer at CloudEva Tech</span>
           </div>
-          <div class="resume-card-body">
-            <h2 class="resume-title">Resume</h2>
-            <p class="resume-description">
-              View my experience, projects, and technical background
-            </p>
-            <div class="resume-footer">
-              <span class="resume-action">Open Resume</span>
-              <svg class="resume-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
+          <a href="resume.pdf" target="_blank" class="about-highlight about-resume-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"/>
+              <path d="M14 2V8H20"/>
+            </svg>
+            <span class="about-highlight-text">View Resume</span>
+            <svg class="about-resume-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
         </div>
-          <div class="resume-card-accent"></div>
+        <div class="about-tags">
+          <span class="about-tag">Python</span>
+          <span class="about-tag">FastAPI</span>
+          <span class="about-tag">PostgreSQL</span>
+          <span class="about-tag">AWS</span>
+          <span class="about-tag">Stripe</span>
+          <span class="about-tag">Firebase</span>
+          <span class="about-tag">HubSpot</span>
+          <span class="about-tag">System Design</span>
         </div>
-      </a>
+      </div>
     </section>
 
-    <section class="mb-4">
-      <div class="working-on-card">
-        <div class="working-on-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
+    <section class="mb-5" id="awardsSection">
+      <div class="section-header">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-title">Awards</h2>
+            <p class="section-subtitle">Competitive programming achievements</p>
+          </div>
+          <a href="https://www.linkedin.com/in/abdulrehmanamerbaig/details/honors/?profileId=ACoAAEAnSxMBGkbJUC4qloYzhAqIXy-Q_rcTJlQ" target="_blank" rel="noopener noreferrer" class="section-action-btn">
+            <strong>View All on LinkedIn</strong>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+          </a>
         </div>
-        <div class="working-on-content">
-          <p class="working-on-label">What I'm working on next</p>
-          <p class="working-on-text">System Design - Working on Rate Limiter</p>
-          <div class="progress-container">
-            <div class="progress-info">
-              <span class="progress-label">Progress</span>
-              <span class="progress-percentage">65%</span>
-            </div>
-            <div class="progress-bar-wrapper">
-              <div class="progress-bar" style="width: 65%"></div>
-            </div>
+      </div>
+      <div class="awards-timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-progress" id="timelineProgress"></div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot timeline-dot-gold"></div>
+          <div class="timeline-text">
+            <span class="timeline-title">Silver Medalist — ICPC Onsite Regional Contest</span>
+            <span class="timeline-meta">ICPC · Feb 2025</span>
           </div>
         </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot timeline-dot-silver"></div>
+          <div class="timeline-text">
+            <span class="timeline-title">1st Runner Up — Visio Spark</span>
+            <span class="timeline-meta">COMSATS University · Dec 2024</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot timeline-dot-bronze"></div>
+          <div class="timeline-text">
+            <span class="timeline-title">3rd Runner Up — Forman Ignite</span>
+            <span class="timeline-meta">FCCU · Jun 2024</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot timeline-dot-silver"></div>
+          <div class="timeline-text">
+            <span class="timeline-title">1st Runner Up — Code Fest 3.0</span>
+            <span class="timeline-meta">PUCON, PUCIT · Jan 2023</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5" id="projectsSection">
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-subtitle">Things I've built and shipped</p>
+      </div>
+
+      <div class="project-showcase">
+        <!-- Task Tracker - Featured Card -->
+        <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card showcase-card-featured">
+          <div class="showcase-card-inner">
+            <div class="showcase-card-top">
+              <div class="showcase-icon-wrapper showcase-icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11l3 3L22 4"/>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+              </div>
+              <div class="showcase-badges">
+                <span class="showcase-badge showcase-badge-ai">AI-Powered</span>
+                <span class="showcase-badge">CLI</span>
+              </div>
+            </div>
+            <div class="showcase-card-body">
+              <h3 class="showcase-title">Task Tracker</h3>
+              <p class="showcase-desc">Python CLI with multi-agent AI architecture. Master, Conversation, Command &amp; Python agents work together — reducing hallucination by 70%.</p>
+              <div class="showcase-tech-stack">
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">Multi-Agent AI</span>
+                <span class="tech-pill">OpenRouter</span>
+                <span class="tech-pill">pytest</span>
+              </div>
+            </div>
+            <div class="showcase-card-footer">
+              <span class="showcase-link-text">View on GitHub</span>
+              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </div>
+          </div>
+          <div class="showcase-glow showcase-glow-blue"></div>
+        </a>
+
+        <!-- URL Shortener Card -->
+        <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card">
+          <div class="showcase-card-inner">
+            <div class="showcase-card-top">
+              <div class="showcase-icon-wrapper showcase-icon-amber">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+              </div>
+              <div class="showcase-badges">
+                <span class="showcase-badge">System Design</span>
+                <span class="showcase-badge showcase-badge-wip">WIP</span>
+              </div>
+            </div>
+            <div class="showcase-card-body">
+              <h3 class="showcase-title">URL Shortener</h3>
+              <div class="showcase-image-wrapper" data-image-url="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" data-image-title="URL Shortener Architecture">
+                <img src="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" alt="URL Shortener Architecture" class="showcase-image" loading="lazy" />
+                <div class="showcase-image-overlay">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+                  <span>Click to expand</span>
+                </div>
+              </div>
+              <p class="showcase-desc">Scalable URL shortening service designed for high availability and partition tolerance with read-optimized architecture.</p>
+              <div class="showcase-tech-stack">
+                <span class="tech-pill">Distributed Systems</span>
+                <span class="tech-pill">CAP Theorem</span>
+                <span class="tech-pill">Scaling Reads</span>
+              </div>
+            </div>
+            <div class="showcase-card-footer">
+              <span class="showcase-link-text">View on GitHub</span>
+              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </div>
+          </div>
+          <div class="showcase-glow showcase-glow-amber"></div>
+        </a>
       </div>
     </section>
 
     <footer>
-      <p class="mb-0">© 2026 Abdul Rehman Amer Baig</p>
+      <div class="footer-links">
+        <a href="https://github.com/abdul-rehman-amer-baig" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="GitHub">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/abdulrehmanamerbaig/" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="LinkedIn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+      <p class="mb-0">&copy; 2026 Abdul Rehman Amer Baig</p>
     </footer>
   </main>
-
-  <!-- Bottom Navbar -->
-  <nav class="bottom-navbar">
-    <div class="bottom-navbar-content">
-      <a href="index.html" class="active">Home</a>
-      <a href="#" id="projectsToggle" class="nav-toggle">System Design</a>
-    </div>
-  </nav>
-
-  <!-- Projects Dropdown -->
-  <div class="system-design-dropdown" id="projectsDropdown">
-    <div class="dropdown-content">
-      <div class="dropdown-header">
-        <div class="header-title-wrapper">
-          <h3>System Design</h3>
-          <button class="view-details-link" id="frameworkModalToggle" aria-label="View Framework">
-            Click To View Details
-          </button>
-        </div>
-        <button class="close-btn" id="closeDropdown">&times;</button>
-      </div>
-      <div class="projects-list-dropdown" id="projectsListDropdown">
-        <!-- Projects will be dynamically rendered here -->
-      </div>
-      <div class="no-results-dropdown" id="noResultsDropdown">
-        <p>No projects found matching your search.</p>
-      </div>
-      <div class="dropdown-toolbar">
-        <input 
-          type="text" 
-          id="searchInputDropdown" 
-          class="search-input-dropdown" 
-          placeholder="What are you looking for..."
-          autocomplete="off"
-        />
-        <button class="expand-all-btn" id="expandAllBtn" aria-label="Expand all">Expand All</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Image Modal -->
   <div class="image-modal" id="imageModal">
     <div class="image-modal-overlay"></div>
     <div class="image-modal-content">
       <button class="image-modal-close" id="closeImageModal">&times;</button>
-      <div class="modal-image-wrap">
+      <div class="modal-zoom-controls">
+        <button class="modal-zoom-btn" id="zoomOut" aria-label="Zoom out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/></svg>
+        </button>
+        <span class="modal-zoom-level" id="zoomLevel">100%</span>
+        <button class="modal-zoom-btn" id="zoomIn" aria-label="Zoom in">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+        </button>
+        <button class="modal-zoom-btn" id="zoomReset" aria-label="Reset zoom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+      </div>
+      <div class="modal-image-wrap" id="modalImageWrap">
         <img id="modalImage" src="" alt="" class="modal-image-full" />
       </div>
       <p class="modal-image-title" id="modalImageTitle"></p>
-    </div>
-  </div>
-
-  <!-- Framework Modal -->
-  <div class="framework-modal" id="frameworkModal">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>System Design Framework</h3>
-        <button class="modal-close-btn" id="closeFrameworkModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="framework-intro">
-          <p class="framework-description">
-            When designing the system, especially in the interviews, you need to make sure that you are not lost into the one concept and keep rambling around that concept for long. To prevent from hallucinations or stay away from the situation where one gets too deep into one concept and apparently waste all their time on one thing, there is a framework that almost all candidates follow to design the system completely and successfully.
-          </p>
-          <div class="framework-image-container">
-            <img src="system-design-framework.png" alt="System Design Framework Flowchart" class="framework-image" />
-          </div>
-        </div>
-        
-        <div class="framework-sections">
-          <div class="framework-section">
-            <h4 class="framework-section-title">Requirements</h4>
-            <div class="framework-subsection">
-              <h5 class="framework-subsection-title">Functional Requirements</h5>
-              <p class="framework-text">These requirements should focus on the High Level Design and should be enough to create a functional software despite considering the optimisation, scalability and similar kind of factors.</p>
-            </div>
-            <div class="framework-subsection">
-              <h5 class="framework-subsection-title">Non-Functional Requirements</h5>
-              <p class="framework-text">These requirements should focus on Deep Dives that includes an optimisation of the High Level (Functional) System.</p>
-              <p class="framework-text">We need to think about the category of the system →</p>
-              <ul class="framework-list">
-                <li>Scalable reads</li>
-                <li>Scalable writes</li>
-                <li>Maybe Both of them</li>
-              </ul>
-              <p class="framework-text">Which individual properties should we focus on from CAP theorem →</p>
-              <ul class="framework-list">
-                <li><strong>C</strong> → Consistency</li>
-                <li><strong>A</strong> → Availability</li>
-                <li><strong>P</strong> → Partition Tolerance</li>
-              </ul>
-              <p class="framework-text">There is one key concept that I have found very common in system design questions. Most of the time, we tend to create a distributed architecture, and for distributed environments we can't risk the Partition Tolerance property. Because if it occurs then the nodes won't be able to communicate with each other and so forth.</p>
-            </div>
-          </div>
-
-          <div class="framework-section">
-            <h4 class="framework-section-title">Entities</h4>
-            <p class="framework-text">We need to identify the core entities required which helps us to build a basic Data Model and build the structure of API's request, response bodies.</p>
-          </div>
-
-          <div class="framework-section">
-            <h4 class="framework-section-title">API as an interface</h4>
-            <p class="framework-text">In most cases, we choose REST API to know how the user's interact with our system</p>
-          </div>
-
-          <div class="framework-section">
-            <h4 class="framework-section-title">High Level Design</h4>
-            <p class="framework-text">Here, you'll connect the dots of all the preceding building block that we've just studied. Now the High Level System should be functional enough to meet functional requirements. It does not need to think about optimisations and stuff</p>
-          </div>
-
-          <div class="framework-section">
-            <h4 class="framework-section-title">Deep Dives</h4>
-            <p class="framework-text">After creating the High Level Design, you focus on the non-functional requirements which helps you scale the system and you align your system with non-functional requirements</p>
-            <p class="framework-text">You will have an idea of each of the building blocks in detail by having a look at one of the examples</p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
