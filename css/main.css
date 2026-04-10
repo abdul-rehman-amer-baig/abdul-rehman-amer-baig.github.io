@@ -1510,6 +1510,15 @@ header {
   border-color: rgba(139, 92, 246, 0.4);
 }
 
+[data-theme="dark"] .showcase-card:not(.showcase-card-featured) .showcase-card-inner {
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+[data-theme="dark"] .showcase-card:not(.showcase-card-featured):hover .showcase-card-inner {
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
 /* Glow effect behind card */
 .showcase-glow {
   position: absolute;
@@ -1543,7 +1552,7 @@ header {
 }
 
 [data-theme="dark"] .showcase-glow-amber {
-  background: #a78bfa;
+  background: #f59e0b;
 }
 
 /* Card top row */
