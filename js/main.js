@@ -221,6 +221,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // Use Case (README) Modal
+  const USE_CASES = {
+    'news-scheduling': {
+      owner: 'abdul-rehman-amer-baig',
+      repo: 'usecase-system-design-news-scheduling',
+      branch: 'main',
+      title: 'News Scheduling Architecture',
+    },
+  };
+
+  const readmeModal = document.getElementById('readmeModal');
+  const readmeModalBody = document.getElementById('readmeModalBody');
+  const readmeModalTitle = document.getElementById('readmeModalTitle');
+  const readmeModalRepoLink = document.getElementById('readmeModalRepoLink');
+  const closeReadmeModalBtn = document.getElementById('closeReadmeModal');
+  const readmeCache = {};
+
+  async function openReadmeModal(key) {
+    const useCase = USE_CASES[key];
+    if (!useCase || !readmeModal) return;
+
+    const repoUrl = `https://github.com/${useCase.owner}/${useCase.repo}`;
+    const rawBase = `https://raw.githubusercontent.com/${useCase.owner}/${useCase.repo}/${useCase.branch}/`;
+
+    readmeModalTitle.textContent = useCase.title;
+    readmeModalRepoLink.href = repoUrl;
+    readmeModalBody.innerHTML = '<div class="readme-loading">Loading use case…</div>';
+    readmeModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    try {
+      if (!readmeCache[key]) {
+        const res = await fetch(`${rawBase}README.md`);
+        if (!res.ok) throw new Error('README fetch failed');
+        const markdown = await res.text();
+        readmeCache[key] = marked.parse(markdown);
+      }
+      readmeModalBody.innerHTML = readmeCache[key];
+      readmeModalBody.querySelectorAll('img').forEach((img) => {
+        const src = img.getAttribute('src');
+        if (src && !/^https?:\/\//.test(src)) {
+          img.src = rawBase + src.replace(/^\.?\//, '');
+        }
+      });
+    } catch (err) {
+      readmeModalBody.innerHTML = `<div class="readme-error">Couldn't load this use case right now. <a href="${repoUrl}" target="_blank" rel="noopener noreferrer">View it on GitHub instead</a>.</div>`;
+    }
+  }
+
+  function closeReadmeModal() {
+    readmeModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  if (readmeModal) {
+    document.querySelectorAll('[data-usecase]').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        openReadmeModal(card.dataset.usecase);
+      });
+    });
+
+    closeReadmeModalBtn.addEventListener('click', closeReadmeModal);
+    readmeModal.querySelector('.readme-modal-overlay').addEventListener('click', closeReadmeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && readmeModal.classList.contains('show')) closeReadmeModal();
+    });
+  }
 });
 
 // Favicon by theme (light = black on cream, dark = purple on dark)

@@ -18,6 +18,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/main.css" />
+
+  <!-- marked.js - renders use-case README.md content inside the modal -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js" defer></script>
 </head>
 
 
@@ -26,6 +29,7 @@
     <div class="topnav-inner">
       <a href="#aboutSection" class="topnav-link active" data-section="aboutSection">About</a>
       <a href="#awardsSection" class="topnav-link" data-section="awardsSection">Awards</a>
+      <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Use Cases</a>
       <a href="#projectsSection" class="topnav-link" data-section="projectsSection">Projects</a>
     </div>
   </nav>
@@ -140,14 +144,14 @@
       </div>
     </section>
 
-    <section class="mb-5" id="projectsSection">
+    <section class="mb-5" id="useCasesSection">
       <div class="section-header">
-        <h2 class="section-title">Projects</h2>
-        <p class="section-subtitle">Things I've built and shipped</p>
+        <h2 class="section-title">Use Cases</h2>
+        <p class="section-subtitle">Deep dives into system design problems I've worked through — the reasoning behind the architecture, not just the result</p>
       </div>
 
       <div class="project-showcase">
-        <!-- URL Shortener Card -->
+        <!-- URL Shortener Use Case -->
         <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card showcase-card-featured">
           <div class="showcase-card-inner">
             <div class="showcase-card-top">
@@ -187,6 +191,56 @@
           <div class="showcase-glow showcase-glow-amber"></div>
         </a>
 
+        <!-- News Scheduling Use Case -->
+        <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="news-scheduling">
+          <div class="showcase-card-inner">
+            <div class="showcase-card-top">
+              <div class="showcase-icon-wrapper showcase-icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3 3"/>
+                </svg>
+              </div>
+              <div class="showcase-badges">
+                <span class="showcase-badge">System Design</span>
+              </div>
+            </div>
+            <div class="showcase-card-body">
+              <h3 class="showcase-title">News Scheduling Architecture</h3>
+              <div class="showcase-image-wrapper" data-image-url="https://raw.githubusercontent.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling/main/images/eventbridge.png" data-image-title="AWS EventBridge Scheduling Architecture">
+                <img src="https://raw.githubusercontent.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling/main/images/eventbridge.png" alt="AWS EventBridge Scheduling Architecture" class="showcase-image" loading="lazy" />
+                <div class="showcase-image-overlay">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+                  <span>Click to expand</span>
+                </div>
+              </div>
+              <p class="showcase-desc">Walked through three approaches to scheduling delayed news publication — Celery Beat + Redis, a Redis ETA queue, and AWS EventBridge — and the reliability trade-off that decided it.</p>
+              <div class="showcase-tech-stack">
+                <span class="tech-pill">Celery</span>
+                <span class="tech-pill">Redis</span>
+                <span class="tech-pill">AWS EventBridge</span>
+                <span class="tech-pill">Task Scheduling</span>
+              </div>
+            </div>
+            <div class="showcase-card-footer">
+              <span class="showcase-link-text">Read Use Case</span>
+              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7v10"/>
+              </svg>
+            </div>
+          </div>
+          <div class="showcase-glow showcase-glow-blue"></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="mb-5" id="projectsSection">
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-subtitle">Things I've built and shipped</p>
+      </div>
+
+      <div class="project-showcase">
         <!-- Task Tracker Card -->
         <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card">
           <div class="showcase-card-inner">
@@ -258,6 +312,26 @@
         <img id="modalImage" src="" alt="" class="modal-image-full" />
       </div>
       <p class="modal-image-title" id="modalImageTitle"></p>
+    </div>
+  </div>
+
+  <!-- Use Case (README) Modal -->
+  <div class="readme-modal" id="readmeModal">
+    <div class="readme-modal-overlay"></div>
+    <div class="readme-modal-content">
+      <div class="readme-modal-header">
+        <h3 class="readme-modal-title" id="readmeModalTitle">Use Case</h3>
+        <div class="readme-modal-actions">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="readme-modal-repo-link" id="readmeModalRepoLink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <span>View on GitHub</span>
+          </a>
+          <button class="readme-modal-close" id="closeReadmeModal" aria-label="Close">&times;</button>
+        </div>
+      </div>
+      <div class="readme-modal-body" id="readmeModalBody">
+        <div class="readme-loading">Loading use case…</div>
+      </div>
     </div>
   </div>
 
