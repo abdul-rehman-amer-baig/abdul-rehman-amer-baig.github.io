@@ -32,7 +32,13 @@
       <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Use Cases</a>
       <a href="#projectsSection" class="topnav-link" data-section="projectsSection">Projects</a>
     </div>
+    <span class="theme-toggle-anchor" id="themeToggleDockAnchor" aria-hidden="true"></span>
   </nav>
+
+  <!-- Single theme toggle button: always fixed, animates between the header slot and the nav-docked slot -->
+  <button class="theme-toggle theme-toggle-floating" id="themeToggle" aria-label="Toggle dark mode">
+    <span class="theme-icon">🌙</span>
+  </button>
 
   <main class="container py-5">
     <header class="mb-5 pt-4">
@@ -54,9 +60,7 @@
             </p>
           </div>
         </div>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-          <span class="theme-icon">🌙</span>
-        </button>
+        <span class="theme-toggle-anchor" id="themeToggleHomeAnchor" aria-hidden="true"></span>
       </div>
     </header>
 
@@ -80,15 +84,43 @@
             </svg>
           </a>
         </div>
-        <div class="about-tags">
-          <span class="about-tag">Python</span>
-          <span class="about-tag">FastAPI</span>
-          <span class="about-tag">PostgreSQL</span>
-          <span class="about-tag">AWS</span>
-          <span class="about-tag">Stripe</span>
-          <span class="about-tag">Firebase</span>
-          <span class="about-tag">HubSpot</span>
-          <span class="about-tag">System Design</span>
+        <div class="skills-marquee" id="skillsMarquee">
+          <div class="skills-track" id="skillsTrack">
+            <span class="about-tag">Python</span>
+            <span class="about-tag">FastAPI</span>
+            <span class="about-tag">PostgreSQL</span>
+            <span class="about-tag">Redis</span>
+            <span class="about-tag">Celery</span>
+            <span class="about-tag">System Design</span>
+            <span class="about-tag">Firebase</span>
+            <span class="about-tag">AWS EventBridge</span>
+            <span class="about-tag">AWS S3</span>
+            <span class="about-tag">AWS KMS</span>
+            <span class="about-tag">Stripe</span>
+            <span class="about-tag">Mollie</span>
+            <span class="about-tag">HubSpot</span>
+            <span class="about-tag">Twilio</span>
+            <span class="about-tag">FastMCP</span>
+            <span class="about-tag">Pydantic AI</span>
+            <span class="about-tag">Claude</span>
+            <span class="about-tag" aria-hidden="true">Python</span>
+            <span class="about-tag" aria-hidden="true">FastAPI</span>
+            <span class="about-tag" aria-hidden="true">PostgreSQL</span>
+            <span class="about-tag" aria-hidden="true">Redis</span>
+            <span class="about-tag" aria-hidden="true">Celery</span>
+            <span class="about-tag" aria-hidden="true">System Design</span>
+            <span class="about-tag" aria-hidden="true">Firebase</span>
+            <span class="about-tag" aria-hidden="true">AWS EventBridge</span>
+            <span class="about-tag" aria-hidden="true">AWS S3</span>
+            <span class="about-tag" aria-hidden="true">AWS KMS</span>
+            <span class="about-tag" aria-hidden="true">Stripe</span>
+            <span class="about-tag" aria-hidden="true">Mollie</span>
+            <span class="about-tag" aria-hidden="true">HubSpot</span>
+            <span class="about-tag" aria-hidden="true">Twilio</span>
+            <span class="about-tag" aria-hidden="true">FastMCP</span>
+            <span class="about-tag" aria-hidden="true">Pydantic AI</span>
+            <span class="about-tag" aria-hidden="true">Claude</span>
+          </div>
         </div>
       </div>
     </section>
@@ -113,7 +145,7 @@
         <div class="timeline-item">
           <div class="timeline-dot timeline-dot-gold"></div>
           <div class="timeline-text">
-            <span class="timeline-title">Silver Medalist — ICPC Onsite Regional Contest</span>
+            <span class="timeline-title">Silver Medalist, ICPC Onsite Regional Contest</span>
             <span class="timeline-meta">ICPC · Feb 2025</span>
           </div>
         </div>
@@ -121,7 +153,7 @@
         <div class="timeline-item">
           <div class="timeline-dot timeline-dot-silver"></div>
           <div class="timeline-text">
-            <span class="timeline-title">1st Runner Up — Visio Spark</span>
+            <span class="timeline-title">1st Runner Up, Visio Spark</span>
             <span class="timeline-meta">COMSATS University · Dec 2024</span>
           </div>
         </div>
@@ -129,7 +161,7 @@
         <div class="timeline-item">
           <div class="timeline-dot timeline-dot-bronze"></div>
           <div class="timeline-text">
-            <span class="timeline-title">3rd Runner Up — Forman Ignite</span>
+            <span class="timeline-title">3rd Runner Up, Forman Ignite</span>
             <span class="timeline-meta">FCCU · Jun 2024</span>
           </div>
         </div>
@@ -137,7 +169,7 @@
         <div class="timeline-item">
           <div class="timeline-dot timeline-dot-silver"></div>
           <div class="timeline-text">
-            <span class="timeline-title">1st Runner Up — Code Fest 3.0</span>
+            <span class="timeline-title">1st Runner Up, Code Fest 3.0</span>
             <span class="timeline-meta">PUCON, PUCIT · Jan 2023</span>
           </div>
         </div>
@@ -147,7 +179,7 @@
     <section class="mb-5" id="useCasesSection">
       <div class="section-header">
         <h2 class="section-title">Use Cases</h2>
-        <p class="section-subtitle">Deep dives into system design problems I've worked through — the reasoning behind the architecture, not just the result</p>
+        <p class="section-subtitle">Deep dives into system design problems I've worked through, focused on the reasoning behind the architecture, not just the result</p>
       </div>
 
       <div class="project-showcase">
@@ -155,7 +187,7 @@
         <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="news-scheduling">
           <div class="showcase-card-inner">
             <div class="showcase-card-top">
-              <div class="showcase-icon-wrapper showcase-icon-blue">
+              <div class="showcase-icon-wrapper showcase-icon-teal">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="9"/>
                   <path d="M12 7v5l3 3"/>
@@ -167,14 +199,23 @@
             </div>
             <div class="showcase-card-body">
               <h3 class="showcase-title">News Scheduling Architecture</h3>
-              <div class="showcase-image-wrapper" data-image-url="https://raw.githubusercontent.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling/main/images/eventbridge.png" data-image-title="AWS EventBridge Scheduling Architecture">
-                <img src="https://raw.githubusercontent.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling/main/images/eventbridge.png" alt="AWS EventBridge Scheduling Architecture" class="showcase-image" loading="lazy" />
-                <div class="showcase-image-overlay">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
-                  <span>Click to expand</span>
+              <div class="usecase-timeline">
+                <div class="usecase-step">
+                  <span class="usecase-step-num">1</span>
+                  <span class="usecase-step-label">Celery Beat<br />+ Redis</span>
+                </div>
+                <div class="usecase-step-connector"></div>
+                <div class="usecase-step">
+                  <span class="usecase-step-num">2</span>
+                  <span class="usecase-step-label">Redis ETA<br />Queue</span>
+                </div>
+                <div class="usecase-step-connector"></div>
+                <div class="usecase-step usecase-step-final">
+                  <span class="usecase-step-num">&#10003;</span>
+                  <span class="usecase-step-label">AWS<br />EventBridge</span>
                 </div>
               </div>
-              <p class="showcase-desc">Walked through three approaches to scheduling delayed news publication — Celery Beat + Redis, a Redis ETA queue, and AWS EventBridge — and the reliability trade-off that decided it.</p>
+              <p class="showcase-desc">Walked through three approaches to scheduling delayed news publication (Celery Beat + Redis, a Redis ETA queue, and AWS EventBridge) and the reliability trade-off that decided it.</p>
               <div class="showcase-tech-stack">
                 <span class="tech-pill">Celery</span>
                 <span class="tech-pill">Redis</span>
@@ -189,7 +230,7 @@
               </svg>
             </div>
           </div>
-          <div class="showcase-glow showcase-glow-blue"></div>
+          <div class="showcase-glow showcase-glow-teal"></div>
         </a>
       </div>
     </section>
@@ -258,7 +299,7 @@
             </div>
             <div class="showcase-card-body">
               <h3 class="showcase-title">Task Tracker</h3>
-              <p class="showcase-desc">Python CLI with multi-agent AI architecture. Master, Conversation, Command &amp; Python agents work together — reducing hallucination by 70%.</p>
+              <p class="showcase-desc">Python CLI with multi-agent AI architecture. Master, Conversation, Command &amp; Python agents work together, reducing hallucination by 70%.</p>
               <div class="showcase-tech-stack">
                 <span class="tech-pill">Python</span>
                 <span class="tech-pill">Multi-Agent AI</span>
