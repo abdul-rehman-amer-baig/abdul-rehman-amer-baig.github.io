@@ -141,10 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
   closeImageModal.addEventListener('click', closeModal);
   imageModalOverlay.addEventListener('click', closeModal);
 
-  // Close image modal on Escape key
+  // Close image modal on Escape key (takes priority when stacked above the readme modal)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && imageModal.classList.contains('show')) {
       closeModal();
+      e.stopImmediatePropagation();
     }
   });
 
@@ -182,6 +183,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const vibrate = (pattern) => navigator.vibrate?.(pattern);
 
+  // Theme toggle docking: a single fixed button whose top/left are driven to
+  // match either the header anchor or the nav anchor, animated via CSS transition
+  // on those properties, so it reads as one element traveling, not two fading in/out.
+  const themeToggleEl = document.getElementById('themeToggle');
+  const themeToggleHomeAnchor = document.getElementById('themeToggleHomeAnchor');
+  const themeToggleDockAnchor = document.getElementById('themeToggleDockAnchor');
+  let toggleDocked = false;
+  let homeRect = null;
+  let dockRect = null;
+
+  const applyRect = (rect) => {
+    themeToggleEl.style.top = `${rect.top}px`;
+    themeToggleEl.style.left = `${rect.left}px`;
+  };
+
+  if (themeToggleEl && themeToggleHomeAnchor && themeToggleDockAnchor) {
+    // Cache both anchor positions now, before .topnav's entrance animation ever runs.
+    // Reading them live mid-transition instead would capture a transient position from
+    // navAppear's transform keyframes (it wobbles) rather than the element's true resting spot.
+    homeRect = themeToggleHomeAnchor.getBoundingClientRect();
+    dockRect = themeToggleDockAnchor.getBoundingClientRect();
+
+    // Place instantly at the header slot on load, no transition, then re-enable it.
+    themeToggleEl.style.transition = 'none';
+    applyRect(homeRect);
+    requestAnimationFrame(() => {
+      themeToggleEl.style.transition = '';
+    });
+
+    window.addEventListener('resize', () => {
+      homeRect = themeToggleHomeAnchor.getBoundingClientRect();
+      dockRect = themeToggleDockAnchor.getBoundingClientRect();
+      applyRect(toggleDocked ? dockRect : homeRect);
+    });
+  }
+
   const SCROLL_THRESHOLD = 60;
   let lastActive = null;
   let navVisible = false;
@@ -198,6 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (!shouldShow && navVisible) {
       topNav.classList.remove('visible');
       navVisible = false;
+    }
+
+    if (themeToggleEl && shouldShow !== toggleDocked) {
+      toggleDocked = shouldShow;
+      applyRect(toggleDocked ? dockRect : homeRect);
     }
 
     // Active section tracking
@@ -221,6 +263,156 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // Skills marquee: auto-scrolls, pauses on hover, stays manually scrollable/draggable
+  const skillsMarquee = document.getElementById('skillsMarquee');
+  if (skillsMarquee) {
+    const track = document.getElementById('skillsTrack');
+    const SPEED = 0.4;
+    let paused = false;
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let resumeTimer = null;
+
+    const loopWidth = () => track.scrollWidth / 2;
+
+    const wrapScroll = () => {
+      const lw = loopWidth();
+      if (skillsMarquee.scrollLeft >= lw) skillsMarquee.scrollLeft -= lw;
+      else if (skillsMarquee.scrollLeft < 0) skillsMarquee.scrollLeft += lw;
+    };
+
+    const pauseTemporarily = () => {
+      paused = true;
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { paused = false; }, 2000);
+    };
+
+    // scrollLeft is rounded to an integer by the browser, so a sub-pixel
+    // per-frame increment must be accumulated in JS, not read back each tick.
+    let scrollPos = skillsMarquee.scrollLeft;
+    let wasIdle = true;
+
+    (function tick() {
+      if (paused || dragging) {
+        wasIdle = true;
+      } else {
+        if (wasIdle) {
+          scrollPos = skillsMarquee.scrollLeft; // resync after manual interaction
+          wasIdle = false;
+        }
+        scrollPos += SPEED;
+        const lw = loopWidth();
+        if (scrollPos >= lw) scrollPos -= lw;
+        else if (scrollPos < 0) scrollPos += lw;
+        skillsMarquee.scrollLeft = scrollPos;
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    skillsMarquee.addEventListener('mouseenter', () => { paused = true; });
+    skillsMarquee.addEventListener('mouseleave', () => { if (!dragging) paused = false; });
+    skillsMarquee.addEventListener('wheel', pauseTemporarily, { passive: true });
+    skillsMarquee.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+    skillsMarquee.addEventListener('touchend', pauseTemporarily, { passive: true });
+
+    skillsMarquee.addEventListener('mousedown', (e) => {
+      dragging = true;
+      paused = true;
+      dragStartX = e.clientX;
+      dragStartScroll = skillsMarquee.scrollLeft;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      skillsMarquee.scrollLeft = dragStartScroll - (e.clientX - dragStartX);
+      wrapScroll();
+    });
+    window.addEventListener('mouseup', () => {
+      if (dragging) {
+        dragging = false;
+        pauseTemporarily();
+      }
+    });
+  }
+
+  // Use Case (README) Modal
+  const USE_CASES = {
+    'news-scheduling': {
+      owner: 'abdul-rehman-amer-baig',
+      repo: 'usecase-system-design-news-scheduling',
+      branch: 'main',
+      title: 'News Scheduling Architecture',
+    },
+  };
+
+  const readmeModal = document.getElementById('readmeModal');
+  const readmeModalBody = document.getElementById('readmeModalBody');
+  const readmeModalTitle = document.getElementById('readmeModalTitle');
+  const readmeModalRepoLink = document.getElementById('readmeModalRepoLink');
+  const closeReadmeModalBtn = document.getElementById('closeReadmeModal');
+  const readmeCache = {};
+
+  async function openReadmeModal(key) {
+    const useCase = USE_CASES[key];
+    if (!useCase || !readmeModal) return;
+
+    const repoUrl = `https://github.com/${useCase.owner}/${useCase.repo}`;
+    const rawBase = `https://raw.githubusercontent.com/${useCase.owner}/${useCase.repo}/${useCase.branch}/`;
+
+    readmeModalTitle.textContent = useCase.title;
+    readmeModalRepoLink.href = repoUrl;
+    readmeModalBody.innerHTML = '<div class="readme-loading">Loading use case…</div>';
+    readmeModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    try {
+      if (!readmeCache[key]) {
+        const res = await fetch(`${rawBase}README.md`);
+        if (!res.ok) throw new Error('README fetch failed');
+        const markdown = await res.text();
+        readmeCache[key] = marked.parse(markdown);
+      }
+      readmeModalBody.innerHTML = readmeCache[key];
+      readmeModalBody.querySelectorAll('img').forEach((img) => {
+        const src = img.getAttribute('src');
+        if (src && !/^https?:\/\//.test(src)) {
+          img.src = rawBase + src.replace(/^\.?\//, '');
+        }
+        img.addEventListener('click', () => {
+          modalImage.src = img.src;
+          modalImage.alt = img.alt || '';
+          modalImageTitle.textContent = img.alt || '';
+          resetZoom();
+          imageModal.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+    } catch (err) {
+      readmeModalBody.innerHTML = `<div class="readme-error">Couldn't load this use case right now. <a href="${repoUrl}" target="_blank" rel="noopener noreferrer">View it on GitHub instead</a>.</div>`;
+    }
+  }
+
+  function closeReadmeModal() {
+    readmeModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  if (readmeModal) {
+    document.querySelectorAll('[data-usecase]').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        openReadmeModal(card.dataset.usecase);
+      });
+    });
+
+    closeReadmeModalBtn.addEventListener('click', closeReadmeModal);
+    readmeModal.querySelector('.readme-modal-overlay').addEventListener('click', closeReadmeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && readmeModal.classList.contains('show')) closeReadmeModal();
+    });
+  }
 });
 
 // Favicon by theme (light = black on cream, dark = purple on dark)
@@ -232,23 +424,23 @@ function setFavicon(theme) {
   if (link) link.href = theme === 'dark' ? FAVICON_DARK : FAVICON_LIGHT;
 }
 
-// Theme Toggle Functionality
-const themeToggle = document.getElementById('themeToggle');
-if (themeToggle) {
-  const themeIcon = themeToggle.querySelector('.theme-icon');
+// Theme Toggle Functionality (header button + floating button next to the sticky nav)
+const themeToggles = Array.from(document.querySelectorAll('.theme-toggle'));
+if (themeToggles.length) {
   const html = document.documentElement;
   const currentTheme = localStorage.getItem('theme') || 'dark';
   html.setAttribute('data-theme', currentTheme);
-  updateThemeIcon(currentTheme, themeIcon);
+  themeToggles.forEach((btn) => updateThemeIcon(currentTheme, btn.querySelector('.theme-icon')));
   setFavicon(currentTheme);
 
-  themeToggle.addEventListener('click', () => {
-    const t = html.getAttribute('data-theme');
-    const newTheme = t === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme, themeIcon);
-    setFavicon(newTheme);
+  themeToggles.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggles.forEach((b) => updateThemeIcon(newTheme, b.querySelector('.theme-icon')));
+      setFavicon(newTheme);
+    });
   });
 }
 
