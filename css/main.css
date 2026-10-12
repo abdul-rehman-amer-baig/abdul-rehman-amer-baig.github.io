@@ -1098,18 +1098,38 @@ header {
   transform: scale(1.3);
 }
 
-/* Group subheadings inside the awards timeline: plain sentence-case headings in the
-   site's heading style, one step up from the award titles */
+/* Group labels inside the awards timeline: small and muted, a step below the award
+   titles so they read as labels rather than competing headings, with a hairline rule */
 .timeline-group-label {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Rule colour matches the group's dots (blue for work, amber for competitions), fading out */
+.timeline-group-label::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--group-color, var(--border-hover)), transparent);
+  opacity: 0.7;
+}
+
+.timeline-group-work {
+  --group-color: #3b82f6;
+}
+
+.timeline-group-cp {
+  --group-color: #f59e0b;
 }
 
 .timeline-item + .timeline-group-label {
-  margin-top: 1rem;
+  margin-top: 0.85rem;
 }
 
 /* Multi-line entries pin the dot to the title row instead of the vertical centre */
@@ -3879,14 +3899,15 @@ h1, h2, h3, p {
   }
 }
 
-/* Lead line on a side-project card: same type as the description, one step brighter,
-   with a small label styled like the flow strip's "Ruled out" */
+/* Lead line on a side-project card: same type as the description, set apart by a
+   quote-style accent rule and a small label styled like the flow strip's "Ruled out" */
 .showcase-callout {
-  margin: 0.25rem 0 0.6rem;
+  margin: 0.25rem 0 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--accent-hover);
   font-size: 0.875rem;
-  font-weight: 500;
   line-height: 1.6;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 .showcase-callout-label {
