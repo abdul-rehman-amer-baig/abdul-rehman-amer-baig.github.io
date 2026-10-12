@@ -29,9 +29,7 @@
     <div class="topnav-inner">
       <a href="#aboutSection" class="topnav-link active" data-section="aboutSection">About</a>
       <a href="#awardsSection" class="topnav-link" data-section="awardsSection">Awards</a>
-      <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Use Cases</a>
-      <a href="#projectsSection" class="topnav-link" data-section="projectsSection">Projects</a>
-    </div>
+      <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Use Cases</a>    </div>
     <span class="theme-toggle-anchor" id="themeToggleDockAnchor" aria-hidden="true"></span>
   </nav>
 
@@ -41,6 +39,12 @@
   </button>
 
   <main class="container py-5">
+    <a href="#useCasesSection" class="wip-banner">
+      <span class="usecase-more-dot" aria-hidden="true"></span>
+      <span><strong>New system design write-ups in progress.</strong> <span class="wip-banner-cta">Read the latest</span></span>
+      <svg class="wip-banner-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
+
     <header class="mb-5 pt-4">
       <div class="d-flex justify-content-between align-items-start mb-3">
         <div class="header-left">
@@ -130,7 +134,7 @@
         <div class="section-header-row">
           <div>
             <h2 class="section-title">Awards</h2>
-            <p class="section-subtitle">Competitive programming achievements</p>
+            <p class="section-subtitle">Recognition at work and in competitive programming</p>
           </div>
           <a href="https://www.linkedin.com/in/abdulrehmanamerbaig/details/honors/?profileId=ACoAAEAnSxMBGkbJUC4qloYzhAqIXy-Q_rcTJlQ" target="_blank" rel="noopener noreferrer" class="section-action-btn">
             <strong>View All on LinkedIn</strong>
@@ -141,6 +145,26 @@
       <div class="awards-timeline">
         <div class="timeline-line"></div>
         <div class="timeline-progress" id="timelineProgress"></div>
+
+        <p class="timeline-group-label">At work</p>
+
+        <div class="timeline-item timeline-item-detailed">
+          <div class="timeline-dot timeline-dot-work"></div>
+          <div class="timeline-text">
+            <span class="timeline-title">Certificate of Appreciation</span>
+            <span class="timeline-meta">CloudEva Tech · Aug 2026</span>
+            <span class="timeline-desc-line">Built an AI layer with FastMCP, Pydantic AI and Claude that cut prescribing template generation from two days to under an hour.</span>
+            <div class="timeline-actions">
+              <a href="https://www.linkedin.com/feed/update/urn:li:activity:7484871698677420032/" target="_blank" rel="noopener noreferrer" class="timeline-link">
+                View post
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </a>
+              <span class="timeline-soon">Write-up coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="timeline-group-label">Competitive programming</p>
 
         <div class="timeline-item">
           <div class="timeline-dot timeline-dot-gold"></div>
@@ -182,9 +206,17 @@
         <p class="section-subtitle">Deep dives into system design problems I've worked through, focused on the reasoning behind the architecture, not just the result</p>
       </div>
 
-      <div class="project-showcase">
-        <!-- News Scheduling Use Case -->
-        <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-news-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="news-scheduling">
+      <div class="usecase-row-wrap">
+        <button type="button" class="usecase-arrow usecase-arrow-prev" id="usecasePrev" aria-label="Previous use case">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="usecase-arrow usecase-arrow-next" id="usecaseNext" aria-label="Next use case">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+      <div class="project-showcase usecase-list">
+        <!-- Task Scheduling Use Case -->
+        <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-task-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-scheduling">
           <div class="showcase-card-inner">
             <div class="showcase-card-top">
               <div class="showcase-icon-wrapper showcase-icon-teal">
@@ -194,32 +226,46 @@
                 </svg>
               </div>
               <div class="showcase-badges">
-                <span class="showcase-badge">System Design</span>
+                <span class="showcase-badge showcase-badge-prod">Production</span>
               </div>
             </div>
             <div class="showcase-card-body">
-              <h3 class="showcase-title">News Scheduling Architecture</h3>
-              <div class="usecase-timeline">
-                <div class="usecase-step">
-                  <span class="usecase-step-num">1</span>
-                  <span class="usecase-step-label">Celery Beat<br />+ Redis</span>
-                </div>
-                <div class="usecase-step-connector"></div>
-                <div class="usecase-step">
-                  <span class="usecase-step-num">2</span>
-                  <span class="usecase-step-label">Redis ETA<br />Queue</span>
-                </div>
-                <div class="usecase-step-connector"></div>
-                <div class="usecase-step usecase-step-final">
-                  <span class="usecase-step-num">&#10003;</span>
-                  <span class="usecase-step-label">AWS<br />EventBridge</span>
-                </div>
+              <h3 class="showcase-title">One-Off Task Scheduling</h3>
+              <div class="usecase-flow-wrap">
+                <ol class="usecase-flow" aria-label="Request flow of the final design">
+                  <li class="usecase-flow-node">
+                    <span class="usecase-flow-name">FastAPI</span>
+                    <span class="usecase-flow-role">creates schedule</span>
+                  </li>
+                  <li class="usecase-flow-node usecase-flow-node-key">
+                    <span class="usecase-flow-name">EventBridge</span>
+                    <span class="usecase-flow-role">Scheduler</span>
+                  </li>
+                  <li class="usecase-flow-node usecase-flow-node-key">
+                    <span class="usecase-flow-name">Lambda</span>
+                    <span class="usecase-flow-role">+ Sentry</span>
+                  </li>
+                  <li class="usecase-flow-node">
+                    <span class="usecase-flow-name">FastAPI</span>
+                    <span class="usecase-flow-role">runs task</span>
+                  </li>
+                </ol>
+                <p class="usecase-ruled-out">
+                  <span class="usecase-ruled-out-label">Ruled out</span>
+                  <del>Celery Beat + Redis</del>
+                  <span aria-hidden="true">·</span>
+                  <del>Redis ETA queue</del>
+                </p>
               </div>
-              <p class="showcase-desc">Walked through three approaches to scheduling delayed news publication (Celery Beat + Redis, a Redis ETA queue, and AWS EventBridge) and the reliability trade-off that decided it.</p>
+              <p class="showcase-desc">One service that runs time-based tasks at an exact moment: publishing scheduled news and jobs, and hard deleting accounts. Built on EventBridge Scheduler and Lambda, with least-privilege IAM, a secret-protected internal endpoint and Sentry alerting.</p>
               <div class="showcase-tech-stack">
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">FastAPI</span>
                 <span class="tech-pill">Celery</span>
                 <span class="tech-pill">Redis</span>
                 <span class="tech-pill">AWS EventBridge</span>
+                <span class="tech-pill">AWS Lambda</span>
+                <span class="tech-pill">Sentry</span>
                 <span class="tech-pill">Task Scheduling</span>
               </div>
             </div>
@@ -232,18 +278,9 @@
           </div>
           <div class="showcase-glow showcase-glow-teal"></div>
         </a>
-      </div>
-    </section>
 
-    <section class="mb-5" id="projectsSection">
-      <div class="section-header">
-        <h2 class="section-title">Projects</h2>
-        <p class="section-subtitle">Things I've built and shipped</p>
-      </div>
-
-      <div class="project-showcase">
-        <!-- URL Shortener Card -->
-        <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card showcase-card-featured">
+        <!-- URL Shortener Use Case (side project) -->
+        <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="url-shortener">
           <div class="showcase-card-inner">
             <div class="showcase-card-top">
               <div class="showcase-icon-wrapper showcase-icon-amber">
@@ -253,7 +290,7 @@
                 </svg>
               </div>
               <div class="showcase-badges">
-                <span class="showcase-badge">System Design</span>
+                <span class="showcase-badge">Side Project</span>
               </div>
             </div>
             <div class="showcase-card-body">
@@ -265,15 +302,20 @@
                   <span>Click to expand</span>
                 </div>
               </div>
-              <p class="showcase-desc">Scalable URL shortening service designed for high availability and partition tolerance with read-optimized architecture.</p>
+              <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>Built to see how read replicas really behave in practice, with nginx simulating an API gateway in front of them.</p>
+              <p class="showcase-desc">Separate read and write services, three read replicas load-balanced by nginx, and Redis caching with LFU eviction for a read-heavy workload. I also documented where the design falls short, from single points of failure to cache stampedes.</p>
               <div class="showcase-tech-stack">
-                <span class="tech-pill">Distributed Systems</span>
-                <span class="tech-pill">CAP Theorem</span>
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">FastAPI</span>
+                <span class="tech-pill">PostgreSQL</span>
+                <span class="tech-pill">Redis</span>
+                <span class="tech-pill">nginx</span>
+                <span class="tech-pill">Docker Compose</span>
                 <span class="tech-pill">Scaling Reads</span>
               </div>
             </div>
             <div class="showcase-card-footer">
-              <span class="showcase-link-text">View on GitHub</span>
+              <span class="showcase-link-text">Read Use Case</span>
               <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
@@ -282,8 +324,8 @@
           <div class="showcase-glow showcase-glow-amber"></div>
         </a>
 
-        <!-- Task Tracker Card -->
-        <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card">
+        <!-- Task Tracker Use Case (side project) -->
+        <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-tracker">
           <div class="showcase-card-inner">
             <div class="showcase-card-top">
               <div class="showcase-icon-wrapper showcase-icon-blue">
@@ -293,13 +335,13 @@
                 </svg>
               </div>
               <div class="showcase-badges">
-                <span class="showcase-badge showcase-badge-ai">AI-Powered</span>
-                <span class="showcase-badge">CLI</span>
+                <span class="showcase-badge">Side Project</span>
               </div>
             </div>
             <div class="showcase-card-body">
               <h3 class="showcase-title">Task Tracker</h3>
-              <p class="showcase-desc">Python CLI with multi-agent AI architecture. Master, Conversation, Command &amp; Python agents work together, reducing hallucination by 70%.</p>
+              <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>My first hands-on AI project, built to turn my theoretical understanding of LLMs into a working implementation.</p>
+              <p class="showcase-desc">A Python CLI where a master agent routes plain-English requests to conversation, command and code-generation agents. The command agent can only call predefined functions, and generated code is checked against Python's AST before it runs.</p>
               <div class="showcase-tech-stack">
                 <span class="tech-pill">Python</span>
                 <span class="tech-pill">Multi-Agent AI</span>
@@ -308,7 +350,7 @@
               </div>
             </div>
             <div class="showcase-card-footer">
-              <span class="showcase-link-text">View on GitHub</span>
+              <span class="showcase-link-text">Read Use Case</span>
               <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
               </svg>
@@ -316,6 +358,11 @@
           </div>
           <div class="showcase-glow showcase-glow-blue"></div>
         </a>
+      </div>
+      </div>
+      <div class="usecase-more">
+        <span class="usecase-more-dot" aria-hidden="true"></span>
+        <span><strong>More use cases on the way.</strong> I'm writing up more design problems I've worked through.</span>
       </div>
     </section>
 
@@ -363,6 +410,10 @@
       <div class="readme-modal-header">
         <h3 class="readme-modal-title" id="readmeModalTitle">Use Case</h3>
         <div class="readme-modal-actions">
+          <button type="button" class="readme-modal-repo-link readme-modal-copy-link" id="readmeModalCopyLink" aria-label="Copy link to this use case">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span id="readmeModalCopyLabel">Copy link</span>
+          </button>
           <a href="#" target="_blank" rel="noopener noreferrer" class="readme-modal-repo-link" id="readmeModalRepoLink">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             <span>View on GitHub</span>
