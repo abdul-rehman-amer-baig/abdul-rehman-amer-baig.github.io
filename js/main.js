@@ -198,25 +198,42 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleEl.style.left = `${rect.left}px`;
   };
 
-  if (themeToggleEl && themeToggleHomeAnchor && themeToggleDockAnchor) {
-    // Cache both anchor positions now, before .topnav's entrance animation ever runs.
-    // Reading them live mid-transition instead would capture a transient position from
-    // navAppear's transform keyframes (it wobbles) rather than the element's true resting spot.
-    homeRect = themeToggleHomeAnchor.getBoundingClientRect();
-    dockRect = themeToggleDockAnchor.getBoundingClientRect();
+  // Sums the offsetParent chain. Unlike getBoundingClientRect this ignores transforms, so the
+  // header's fadeInUp and navAppear's wobble keyframes can't skew the measured resting spot,
+  // and it's independent of scroll position (e.g. a mobile URL-bar resize while scrolled).
+  const restingOffset = (el) => {
+    let top = 0;
+    let left = 0;
+    for (let node = el; node; node = node.offsetParent) {
+      top += node.offsetTop;
+      left += node.offsetLeft;
+    }
+    return { top, left };
+  };
 
+  const measureAnchors = () => {
+    homeRect = restingOffset(themeToggleHomeAnchor);
+    dockRect = restingOffset(themeToggleDockAnchor);
+  };
+
+  const syncToggle = () => {
+    measureAnchors();
+    applyRect(toggleDocked ? dockRect : homeRect);
+  };
+
+  if (themeToggleEl && themeToggleHomeAnchor && themeToggleDockAnchor) {
     // Place instantly at the header slot on load, no transition, then re-enable it.
+    measureAnchors();
     themeToggleEl.style.transition = 'none';
     applyRect(homeRect);
     requestAnimationFrame(() => {
       themeToggleEl.style.transition = '';
     });
 
-    window.addEventListener('resize', () => {
-      homeRect = themeToggleHomeAnchor.getBoundingClientRect();
-      dockRect = themeToggleDockAnchor.getBoundingClientRect();
-      applyRect(toggleDocked ? dockRect : homeRect);
-    });
+    // Web fonts and late styles shift the header after first paint; re-measure once they land.
+    window.addEventListener('resize', syncToggle);
+    window.addEventListener('load', syncToggle);
+    document.fonts?.ready.then(syncToggle);
   }
 
   const SCROLL_THRESHOLD = 60;
@@ -338,11 +355,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Use Case (README) Modal
   const USE_CASES = {
-    'news-scheduling': {
+    'task-scheduling': {
       owner: 'abdul-rehman-amer-baig',
-      repo: 'usecase-system-design-news-scheduling',
+      repo: 'usecase-system-design-task-scheduling',
       branch: 'main',
-      title: 'News Scheduling Architecture',
+      title: 'One-Off Task Scheduling',
+    },
+    'url-shortener': {
+      owner: 'abdul-rehman-amer-baig',
+      repo: 'system-design-url-shortener',
+      branch: 'main',
+      // The write-up lives in the project folder, not the repo-root README
+      dir: 'url-shortener',
+      title: 'URL Shortener',
+    },
+    'task-tracker': {
+      owner: 'abdul-rehman-amer-baig',
+      repo: 'task-tracker',
+      branch: 'main',
+      title: 'Task Tracker',
     },
   };
 
@@ -351,14 +382,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const readmeModalTitle = document.getElementById('readmeModalTitle');
   const readmeModalRepoLink = document.getElementById('readmeModalRepoLink');
   const closeReadmeModalBtn = document.getElementById('closeReadmeModal');
+  const readmeModalCopyLink = document.getElementById('readmeModalCopyLink');
+  const readmeModalCopyLabel = document.getElementById('readmeModalCopyLabel');
   const readmeCache = {};
 
-  async function openReadmeModal(key) {
+  // Shareable deep links: each use case pop-up lives at #use-case/<key>
+  const USE_CASE_HASH_PREFIX = '#use-case/';
+  const useCaseKeyFromHash = () => {
+    if (!location.hash.startsWith(USE_CASE_HASH_PREFIX)) return null;
+    const key = decodeURIComponent(location.hash.slice(USE_CASE_HASH_PREFIX.length));
+    return USE_CASES[key] ? key : null;
+  };
+  // True when this page pushed the history entry for the open pop-up, so closing can go
+  // back to it; false when the visitor arrived via a shared link (nothing to go back to)
+  let pushedUseCaseEntry = false;
+
+  async function openReadmeModal(key, { updateUrl = true } = {}) {
     const useCase = USE_CASES[key];
     if (!useCase || !readmeModal) return;
 
+    if (updateUrl && useCaseKeyFromHash() !== key) {
+      history.pushState({ useCase: key }, '', `${USE_CASE_HASH_PREFIX}${key}`);
+      pushedUseCaseEntry = true;
+    }
+    readmeModalCopyLink.classList.remove('copied');
+    readmeModalCopyLabel.textContent = 'Copy link';
+
     const repoUrl = `https://github.com/${useCase.owner}/${useCase.repo}`;
-    const rawBase = `https://raw.githubusercontent.com/${useCase.owner}/${useCase.repo}/${useCase.branch}/`;
+    const dirPath = useCase.dir ? `${useCase.dir}/` : '';
+    const rawBase = `https://raw.githubusercontent.com/${useCase.owner}/${useCase.repo}/${useCase.branch}/${dirPath}`;
 
     readmeModalTitle.textContent = useCase.title;
     readmeModalRepoLink.href = repoUrl;
@@ -393,16 +445,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function closeReadmeModal() {
+  function hideReadmeModal() {
     readmeModal.classList.remove('show');
     document.body.style.overflow = '';
   }
 
+  function closeReadmeModal() {
+    if (!useCaseKeyFromHash()) {
+      hideReadmeModal();
+    } else if (pushedUseCaseEntry) {
+      // Pop our own entry; the popstate handler hides the modal
+      pushedUseCaseEntry = false;
+      history.back();
+    } else {
+      // Arrived via a shared link: drop the hash without adding history
+      history.replaceState(null, '', location.pathname + location.search);
+      hideReadmeModal();
+    }
+  }
+
   if (readmeModal) {
+    // Back/forward: open or close the pop-up to match the URL
+    window.addEventListener('popstate', () => {
+      const key = useCaseKeyFromHash();
+      if (key) {
+        openReadmeModal(key, { updateUrl: false });
+      } else {
+        pushedUseCaseEntry = false;
+        hideReadmeModal();
+      }
+    });
+
+    // Shared link on load: bring the Use Cases section into view behind the pop-up, then open it
+    const initialKey = useCaseKeyFromHash();
+    if (initialKey) {
+      document.getElementById('useCasesSection')?.scrollIntoView();
+      openReadmeModal(initialKey, { updateUrl: false });
+    }
+
+    readmeModalCopyLink.addEventListener('click', async () => {
+      const key = useCaseKeyFromHash();
+      const url = `${location.href.split('#')[0]}${key ? USE_CASE_HASH_PREFIX + key : ''}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        readmeModalCopyLabel.textContent = 'Copied!';
+        readmeModalCopyLink.classList.add('copied');
+      } catch {
+        // Clipboard blocked (e.g. insecure context): leave the URL in the address bar to copy by hand
+        readmeModalCopyLabel.textContent = 'Copy from address bar';
+      }
+      setTimeout(() => {
+        readmeModalCopyLabel.textContent = 'Copy link';
+        readmeModalCopyLink.classList.remove('copied');
+      }, 2000);
+    });
+
     document.querySelectorAll('[data-usecase]').forEach((card) => {
       card.addEventListener('click', (e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
         e.preventDefault();
+        // Diagram clicks open the image viewer (document-level handler), not the README
+        if (e.target.closest('.showcase-image-wrapper')) return;
         openReadmeModal(card.dataset.usecase);
       });
     });
@@ -412,6 +515,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && readmeModal.classList.contains('show')) closeReadmeModal();
     });
+  }
+
+  // Use Cases row: prev/next arrows step one card at a time; disabled at either end
+  const usecaseRow = document.querySelector('.usecase-list');
+  const usecasePrev = document.getElementById('usecasePrev');
+  const usecaseNext = document.getElementById('usecaseNext');
+  if (usecaseRow && usecasePrev && usecaseNext) {
+    const step = () => {
+      const card = usecaseRow.querySelector('.showcase-card');
+      const gap = parseFloat(getComputedStyle(usecaseRow).columnGap) || 0;
+      return card ? card.offsetWidth + gap : usecaseRow.clientWidth;
+    };
+
+    const updateArrows = () => {
+      const maxScroll = usecaseRow.scrollWidth - usecaseRow.clientWidth;
+      usecasePrev.disabled = usecaseRow.scrollLeft <= 1;
+      usecaseNext.disabled = usecaseRow.scrollLeft >= maxScroll - 1;
+    };
+
+    usecasePrev.addEventListener('click', () => usecaseRow.scrollBy({ left: -step(), behavior: 'smooth' }));
+    usecaseNext.addEventListener('click', () => usecaseRow.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    let arrowFrame = null;
+    usecaseRow.addEventListener('scroll', () => {
+      cancelAnimationFrame(arrowFrame);
+      arrowFrame = requestAnimationFrame(updateArrows);
+    }, { passive: true });
+    window.addEventListener('resize', updateArrows);
+    updateArrows();
   }
 });
 

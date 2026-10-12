@@ -55,13 +55,6 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
-  .theme-toggle-anchor {
-    width: 44px;
-    height: 44px;
-  }
-}
-
 /* The single real toggle: always fixed, JS drives top/left to match whichever anchor is active.
    Uses the #themeToggle ID to out-specificity the base .theme-toggle rule's `position: relative`. */
 #themeToggle.theme-toggle-floating {
@@ -77,11 +70,14 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Fixed height matching the theme toggle (48px; 42px on phones) so the docked pair lines up */
 .topnav-inner {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  height: 48px;
   gap: 0.25rem;
-  padding: 0.375rem;
+  padding: 0 0.375rem;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.97);
   border: 1.5px solid #fcd34d;
@@ -113,8 +109,9 @@
   }
 
   .topnav-inner {
+    height: 42px;
     gap: 0.1rem;
-    padding: 0.3rem;
+    padding: 0 0.3rem;
   }
 
   .topnav-link {
@@ -122,15 +119,20 @@
     font-size: 0.68rem;
   }
 
-  .theme-toggle-floating {
-    width: 34px;
-    height: 34px;
-    font-size: 1rem;
+  /* ID selector so this beats the later base `.theme-toggle` 48px size; matches the 42px nav pill */
+  #themeToggle.theme-toggle-floating {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  #themeToggle .theme-icon {
+    font-size: 1.15rem;
   }
 
   .theme-toggle-anchor {
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
   }
 }
 
@@ -1087,8 +1089,83 @@ header {
   box-shadow: 0 0 0 2px #cd7f3240;
 }
 
+.timeline-dot-work {
+  background: #3b82f6;
+  box-shadow: 0 0 0 2px #3b82f640;
+}
+
 .timeline-item:hover .timeline-dot {
   transform: scale(1.3);
+}
+
+/* Group subheadings inside the awards timeline: plain sentence-case headings in the
+   site's heading style, one step up from the award titles */
+.timeline-group-label {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.timeline-item + .timeline-group-label {
+  margin-top: 1rem;
+}
+
+/* Multi-line entries pin the dot to the title row instead of the vertical centre */
+.timeline-item-detailed .timeline-dot {
+  top: 0.3rem;
+  margin-top: 0;
+}
+
+.timeline-desc-line {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.timeline-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.timeline-soon {
+  padding: 0.15rem 0.55rem;
+  border: 1px dashed var(--border-hover);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.timeline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+[data-theme="dark"] .timeline-link {
+  color: #60a5fa;
+}
+
+.timeline-link:hover {
+  text-decoration: underline;
+}
+
+.timeline-item-detailed {
+  padding-bottom: 1rem;
 }
 
 .awards-grid {
@@ -1392,7 +1469,6 @@ header {
 }
 
 .showcase-card:hover .showcase-card-inner {
-  transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
@@ -1527,6 +1603,36 @@ header {
   background: rgba(139, 92, 246, 0.2);
   color: #c4b5fd;
   border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* "Production": green with a status dot, so shipped work stands out from side projects */
+.showcase-badge-prod {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #dcfce7;
+  color: #15803d;
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.showcase-badge-prod::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+[data-theme="dark"] .showcase-badge-prod {
+  background: rgba(34, 197, 94, 0.14);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+[data-theme="dark"] .showcase-badge-prod::before {
+  background: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
 }
 
 .showcase-badge-wip {
@@ -1682,6 +1788,11 @@ header {
 /* Featured card accent */
 [data-theme="dark"] .showcase-card-featured:hover .showcase-card-inner {
   box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+}
+
+/* Use case cards: neutral lift shadow so the teal glow underneath is the only accent */
+[data-theme="dark"] .showcase-card[data-usecase]:hover .showcase-card-inner {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 /* ---------- Footer ---------- */
@@ -3375,9 +3486,7 @@ h1, h2, h3, p {
 
 
 @media (max-width: 768px) {
-  .theme-toggle {
-    width: 44px;
-    height: 44px;
+  .theme-icon {
     font-size: 1.25rem;
   }
 }
@@ -3622,73 +3731,331 @@ h1, h2, h3, p {
   }
 }
 
-/* ---------- Use Case Card: Approach Timeline ---------- */
-.usecase-timeline {
+/* ---------- Top-of-page "write-ups in progress" banner ---------- */
+.wip-banner {
   display: flex;
-  align-items: flex-start;
-  gap: 0.25rem;
-  margin-bottom: 1.1rem;
-  padding-top: 0.25rem;
-}
-
-.usecase-step {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  flex: 1;
-  text-align: center;
-  min-width: 0;
+  gap: 0.6rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  border: 1.5px dashed var(--border-hover);
+  border-radius: 999px;
+  background: var(--bg-card);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  text-decoration: none;
+  animation: fadeInUp 0.8s ease-out;
+  transition: border-color 0.2s ease;
 }
 
-.usecase-step-num {
+.wip-banner strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.wip-banner-cta {
+  color: #3f7d72;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .wip-banner-cta {
+  color: #8fbdb2;
+}
+
+.wip-banner-arrow {
+  flex-shrink: 0;
+  color: #3f7d72;
+  transition: transform 0.2s ease;
+}
+
+[data-theme="dark"] .wip-banner-arrow {
+  color: #8fbdb2;
+}
+
+.wip-banner:hover {
+  border-color: #4f9d92;
+  color: var(--text-secondary);
+}
+
+.wip-banner:hover .wip-banner-arrow {
+  transform: translateY(2px);
+}
+
+@media (max-width: 480px) {
+  .wip-banner {
+    border-radius: 14px;
+    font-size: 0.72rem;
+  }
+}
+
+/* Use cases sit in one row and scroll sideways instead of wrapping. Bottom padding
+   leaves room for each card's glow, which overflow-x: auto would otherwise clip. */
+.project-showcase.usecase-list {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  /* overflow-x: auto would otherwise make overflow-y auto too, and a pixel of rounding
+     lets the row trap vertical wheel/trackpad scrolling; only the page scrolls vertically */
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  padding: 4px 0 2.25rem;
+  margin-bottom: -1.25rem;
+  scrollbar-width: none;
+}
+
+.project-showcase.usecase-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* A bit under half width so the next card peeks in as a hint, alongside the arrows */
+.usecase-list > .showcase-card {
+  flex: 0 0 calc((100% - 1rem) * 0.47);
+  scroll-snap-align: start;
+}
+
+/* Prev/next arrows on the row's left and right edges, vertically centred on the cards
+   (bottom offset matches the row's glow padding). Dimmed, not hidden, at either end. */
+.usecase-row-wrap {
+  position: relative;
+}
+
+.usecase-arrow {
+  position: absolute;
+  top: calc(50% - 1rem);
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
+  margin-top: -19px;
+  border: 1px solid var(--border-hover);
   border-radius: 50%;
-  border: 2px solid #7fb0a6;
-  color: #3f7d72;
-  font-size: 0.8rem;
-  font-weight: 800;
-  margin-bottom: 0.4rem;
-  flex-shrink: 0;
-  background: rgba(79, 157, 146, 0.1);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
 }
 
-[data-theme="dark"] .usecase-step-num {
-  color: #8fbdb2;
-  border-color: #6ba297;
-  background: rgba(79, 157, 146, 0.15);
+.usecase-arrow-prev {
+  left: -19px;
 }
 
-.usecase-step-final .usecase-step-num {
-  background: #4f9d92;
-  border-color: #4f9d92;
-  color: #fff;
+.usecase-arrow-next {
+  right: -19px;
 }
 
-.usecase-step-label {
-  font-size: 0.72rem;
+.usecase-arrow:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.usecase-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Phones: plain vertical stack, no sideways scrolling */
+@media (max-width: 576px) {
+  .usecase-arrow {
+    display: none;
+  }
+
+  .project-showcase.usecase-list {
+    flex-direction: column;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding: 4px 0 0;
+    margin-bottom: 0;
+  }
+
+  .usecase-list > .showcase-card {
+    flex: none;
+  }
+}
+
+/* Lead line on a side-project card: same type as the description, one step brighter,
+   with a small label styled like the flow strip's "Ruled out" */
+.showcase-callout {
+  margin: 0.25rem 0 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.showcase-callout-label {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.64rem;
   font-weight: 600;
-  line-height: 1.3;
-  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
 }
 
-.usecase-step-final .usecase-step-label {
-  color: var(--text-primary);
-  font-weight: 700;
+/* ---------- Use Cases: "more to come" strip ---------- */
+.usecase-more {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px dashed var(--border-hover);
+  border-radius: 14px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
 }
 
-.usecase-step-connector {
+.usecase-more strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Pulsing dot reads as "in progress" */
+.usecase-more-dot {
   flex-shrink: 0;
-  align-self: flex-start;
-  margin-top: 13px;
-  width: 100%;
-  max-width: 32px;
-  height: 2px;
-  background: #7fb0a6;
-  opacity: 0.5;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4f9d92;
+  box-shadow: 0 0 0 0 rgba(79, 157, 146, 0.5);
+  animation: usecaseMorePulse 2s ease-out infinite;
+}
+
+@keyframes usecaseMorePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(79, 157, 146, 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(79, 157, 146, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 157, 146, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .usecase-more-dot {
+    animation: none;
+  }
+}
+
+/* ---------- Use Case Card: Final Design Flow Strip ---------- */
+/* Sized against the card body, not the viewport: cards sit side by side on desktop,
+   so the strip can be narrow on a wide screen */
+.usecase-list .showcase-card-body {
+  container-type: inline-size;
+}
+
+.usecase-flow-wrap {
+  margin-bottom: 1.1rem;
+  padding-top: 0.75rem;
+}
+
+.usecase-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.usecase-flow-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  min-width: 0;
+  padding: 0.6rem 0.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(79, 157, 146, 0.28);
+  background: rgba(79, 157, 146, 0.06);
+  text-align: center;
+}
+
+[data-theme="dark"] .usecase-flow-node {
+  border-color: rgba(107, 162, 151, 0.28);
+  background: rgba(79, 157, 146, 0.08);
+}
+
+/* The two AWS pieces are the heart of the design, so they get the solid teal treatment */
+.usecase-flow-node-key {
+  border-color: #4f9d92;
+  background: rgba(79, 157, 146, 0.16);
+}
+
+[data-theme="dark"] .usecase-flow-node-key {
+  border-color: #6ba297;
+  background: rgba(79, 157, 146, 0.2);
+}
+
+/* Arrow centred in the grid gap to the right of every node but the last */
+.usecase-flow-node:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(-0.625rem - 4px);
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid #7fb0a6;
+  border-right: 2px solid #7fb0a6;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.usecase-flow-name {
+  max-width: 100%;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.usecase-flow-role {
+  max-width: 100%;
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-secondary);
+}
+
+.usecase-ruled-out {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.45rem;
+  margin: 0.7rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+.usecase-ruled-out-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.64rem;
+  color: var(--text-secondary);
+}
+
+.usecase-ruled-out del {
+  text-decoration-thickness: 1px;
+}
+
+@container (max-width: 520px) {
+  /* Four nodes don't fit in one row in a narrow card, so wrap to a 2x2 grid read
+     left-to-right, top-to-bottom; the arrow after node 2 would point off the edge, so it's dropped. */
+  .usecase-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.25rem;
+  }
+
+  .usecase-flow-node:nth-child(2)::after {
+    content: none;
+  }
 }
 
 /* ---------- README / Use Case Modal ---------- */
@@ -3790,6 +4157,23 @@ h1, h2, h3, p {
 .readme-modal-repo-link:hover {
   color: var(--text-primary);
   border-color: var(--border-hover);
+}
+
+/* Button version of the header link (Copy link): reset native button styles */
+.readme-modal-copy-link {
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.readme-modal-copy-link.copied {
+  color: #15803d;
+  border-color: rgba(22, 163, 74, 0.4);
+}
+
+[data-theme="dark"] .readme-modal-copy-link.copied {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.4);
 }
 
 .readme-modal-close {
@@ -3927,6 +4311,76 @@ h1, h2, h3, p {
   padding: 0.1rem 1rem;
   border-left: 3px solid var(--highlight-border, var(--accent));
   color: var(--text-secondary);
+}
+
+/* Tables: full width, rounded outer border (separate + spacing 0 so the radius applies),
+   cell dividers drawn on right/bottom only */
+.readme-modal-body table {
+  width: 100%;
+  margin: 0 0 1.25rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+.readme-modal-body th,
+.readme-modal-body td {
+  padding: 0.55rem 0.85rem;
+  border-right: 1px solid var(--border-hover);
+  border-bottom: 1px solid var(--border-hover);
+  text-align: left;
+  vertical-align: top;
+}
+
+.readme-modal-body th:last-child,
+.readme-modal-body td:last-child {
+  border-right: none;
+}
+
+.readme-modal-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* On phones, wide tables scroll sideways inside the modal instead of squashing */
+@media (max-width: 640px) {
+  .readme-modal-body table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+.readme-modal-body th {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.readme-modal-body td {
+  color: var(--text-secondary);
+}
+
+.readme-modal-body tbody tr:nth-child(even) td {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .readme-modal-body table,
+[data-theme="dark"] .readme-modal-body th,
+[data-theme="dark"] .readme-modal-body td {
+  border-color: #2e2e2e;
+}
+
+[data-theme="dark"] .readme-modal-body th {
+  background: #1f1f1f;
+}
+
+[data-theme="dark"] .readme-modal-body tbody tr:nth-child(even) td {
+  background: #1a1a1a;
 }
 
 @media (max-width: 640px) {
