@@ -579,6 +579,101 @@ document.addEventListener('DOMContentLoaded', () => {
     link.href = `mailto:${address}${query ? `?${query}` : ''}`;
   });
 
+  /* ---------------------------------------------------------------------------
+     Write-up backlog: everything queued up, grouped by theme behind a toggle.
+     Add an entry here and the counts, progress bar and groups all follow.
+     --------------------------------------------------------------------------- */
+  const PLANNED_WRITE_UPS = [
+    { title: 'AI prescribing templates', theme: 'AI & Healthcare' },
+    { title: 'The Twilio bill that doubled', theme: 'Cost & Performance' },
+    { title: 'Building recurring subscriptions on Stripe', theme: 'Payments' },
+    { title: 'Splitting payments across vendors with Mollie', theme: 'Payments' },
+    { title: 'AI Scribe: consultation notes from conversation', theme: 'AI & Healthcare' },
+    { title: 'Telehealth billing by call duration', theme: 'AI & Healthcare' },
+    { title: 'Wallet auto top-up with payment_intent', theme: 'Payments' },
+    { title: 'Background jobs without Redis or Celery', theme: 'Cost & Performance' },
+    { title: 'Short-lived access tokens and a refresh flow', theme: 'Security' },
+    { title: 'Reviewing code for a team of two', theme: 'Leadership' },
+  ];
+
+  const published = Object.keys(USE_CASES).length;
+  const total = published + PLANNED_WRITE_UPS.length;
+  const percent = Math.round((published / total) * 100);
+
+  // The top banner carries the same progress, so both move together
+  const backlogBanner = document.querySelector('.wip-banner');
+  if (backlogBanner && !backlogBanner.querySelector('.wu-banner-progress')) {
+    const progress = document.createElement('span');
+    progress.className = 'wu-banner-progress';
+    // The bar is decorative here: the count beside it already states the numbers,
+    // and marking it up as a progressbar too would announce them twice
+    progress.innerHTML = `
+      <span class="wu-track wu-track-mini" aria-hidden="true"><span class="wu-fill" style="width: ${percent}%"></span></span>
+      <span class="wu-banner-count">${published}/${total}</span>`;
+    backlogBanner.insertBefore(progress, backlogBanner.querySelector('.wip-banner-arrow'));
+  }
+
+  /* The backlog panel is a working document, so it only shows while developing:
+     on localhost / Live Server / a file:// open, or with ?backlog in the URL to
+     spot-check it on the published site. Note this only hides it — the titles are
+     still in this file, so treat them as public. */
+  const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]', ''];
+  const showBacklog =
+    LOCAL_HOSTS.includes(location.hostname) ||
+    location.protocol === 'file:' ||
+    new URLSearchParams(location.search).has('backlog');
+
+  const backlogEl = document.getElementById('writeUpBacklog');
+  if (backlogEl && showBacklog) {
+    const themes = [...new Set(PLANNED_WRITE_UPS.map((w) => w.theme))];
+    const inTheme = (theme) => PLANNED_WRITE_UPS.filter((w) => w.theme === theme);
+
+    backlogEl.className = 'wu-panel';
+    backlogEl.innerHTML = `
+      <div class="wu-head">
+        <span class="usecase-more-dot" aria-hidden="true"></span>
+        <span class="wu-head-title">Write-ups published</span>
+        <span class="wu-count"><strong>${published}</strong> of ${total}</span>
+      </div>
+      <div class="wu-track" role="progressbar" aria-valuenow="${published}" aria-valuemin="0" aria-valuemax="${total}" aria-label="Write-ups published">
+        <div class="wu-fill" style="width: ${percent}%"></div>
+      </div>
+      <div class="wu-summary">
+        ${themes.map((theme) => `
+          <span class="wu-summary-item">${theme}<span class="wu-summary-count">${inTheme(theme).length}</span></span>`).join('')}
+      </div>
+      <div class="wu-details" id="writeUpBacklogDetails">
+        <div class="wu-details-inner">
+          <div class="wu-groups">
+            ${themes.map((theme) => `
+              <div class="wu-group">
+                <div class="wu-group-head">
+                  <span class="wu-group-name">${theme}</span>
+                  <span class="wu-group-count">${inTheme(theme).length}</span>
+                </div>
+                <ul class="wu-list">
+                  ${inTheme(theme).map((w) => `<li class="wu-item">${w.title}</li>`).join('')}
+                </ul>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <button type="button" class="wu-toggle" aria-expanded="false" aria-controls="writeUpBacklogDetails">
+        <span class="wu-toggle-text">Show all ${PLANNED_WRITE_UPS.length}</span>
+        <svg class="wu-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>`;
+
+    const toggle = backlogEl.querySelector('.wu-toggle');
+    const toggleText = backlogEl.querySelector('.wu-toggle-text');
+    toggle.addEventListener('click', () => {
+      const open = backlogEl.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggleText.textContent = open ? 'Show less' : `Show all ${PLANNED_WRITE_UPS.length}`;
+    });
+  }
+
   // Contact tooltips: show the address/number itself. mailto only helps visitors with a
   // desktop client, and plenty of people would rather save the number than open a chat.
   const noHover = window.matchMedia('(hover: none)').matches;

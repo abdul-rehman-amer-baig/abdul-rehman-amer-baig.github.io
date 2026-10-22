@@ -4142,25 +4142,7 @@ h1, h2, h3, p {
 }
 
 /* ---------- Use Cases: "more to come" strip ---------- */
-.usecase-more {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  margin-top: 1rem;
-  padding: 0.85rem 1.1rem;
-  border: 1.5px dashed var(--border-hover);
-  border-radius: 14px;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.usecase-more strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-/* Pulsing dot reads as "in progress" */
+/* Pulsing dot reads as "in progress"; used by the top banner and the backlog panel */
 .usecase-more-dot {
   flex-shrink: 0;
   width: 8px;
@@ -4659,5 +4641,245 @@ h1, h2, h3, p {
 
   .readme-modal-body {
     padding: 1.25rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Write-up backlog: how many use cases are published out of those planned,
+   with the queue grouped by theme behind a toggle.
+   --------------------------------------------------------------------------- */
+.wu-panel {
+  margin-top: 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 1.5px dashed var(--border-hover);
+  border-radius: 14px;
+  color: var(--text-secondary);
+}
+
+.wu-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.wu-head-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wu-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.wu-count strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+/* --accent is a pale tint in light mode, so the fill uses the same deep amber /
+   lifted purple pair as the contact icons */
+.wu-track {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--highlight);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.wu-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #d97706;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="dark"] .wu-fill {
+  background: #a78bfa;
+}
+
+/* Collapsed state: one line of per-theme counts */
+.wu-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.9rem;
+  font-size: 0.75rem;
+}
+
+.wu-summary-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.wu-summary-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--highlight);
+  border: 1px solid var(--border);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* grid-template-rows 0fr -> 1fr animates to the content's natural height,
+   which max-height cannot do without hardcoding a guess */
+.wu-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wu-panel.open .wu-details {
+  grid-template-rows: 1fr;
+}
+
+.wu-details-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.wu-groups {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.wu-group-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.wu-group-name {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.wu-group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--highlight);
+  border: 1px solid var(--border);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.wu-list {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.wu-item {
+  position: relative;
+  padding: 0.4rem 0.7rem 0.4rem 1.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 9px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.wu-item::before {
+  content: '';
+  position: absolute;
+  left: 0.65rem;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hover);
+}
+
+.wu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.9rem;
+  padding: 0.45rem;
+  border: 1px dashed var(--border-hover);
+  border-radius: 9px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wu-toggle:hover {
+  background: var(--highlight);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.wu-toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.wu-panel.open .wu-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Same progress as the backlog panel, shown in the top banner.
+   .wu-track is a flex child in the panel; here it is a fixed-width inline span,
+   so both it and its fill need an explicit display to keep their height. */
+.wu-banner-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.wu-banner-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.wu-track-mini {
+  display: inline-block;
+  flex: none;
+  flex-shrink: 0;
+  width: 56px;
+  height: 4px;
+}
+
+.wu-track-mini .wu-fill {
+  display: block;
+}
+
+@media (max-width: 480px) {
+  /* The banner is tight at this width; shorten the bar rather than drop it */
+  .wu-track-mini {
+    width: 36px;
   }
 }
