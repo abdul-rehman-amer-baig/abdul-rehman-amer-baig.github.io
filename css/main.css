@@ -942,30 +942,86 @@ header {
   align-items: center;
 }
 
-.about-resume-btn {
-  text-decoration: none;
-  color: inherit;
-  animation: floatBadge 1.2s ease-in-out infinite;
-}
-
 @keyframes floatBadge {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
 
-.about-resume-btn:hover {
-  animation-play-state: paused;
+/* Header call-to-action pair: WhatsApp primary, resume secondary */
+.header-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+  padding-left: calc(56px + 1.25rem); /* clears the logo so it lines up with the name */
 }
 
-.about-resume-arrow {
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem; /* matches .about-highlight so the whole page shares one button scale */
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.header-cta-icon {
+  flex-shrink: 0;
+}
+
+.header-cta-primary {
+  background: #25d366;
+  color: #0b1f14;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.22);
+}
+
+.header-cta-primary:hover {
+  background: #1fb855;
+  color: #0b1f14;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+[data-theme="dark"] .header-cta-primary {
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.16);
+}
+
+[data-theme="dark"] .header-cta-primary:hover {
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.26);
+}
+
+.header-cta-secondary {
+  background: var(--highlight);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.header-cta-secondary:hover {
+  background: var(--highlight-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .header-cta-secondary:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.header-cta-arrow {
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.about-resume-btn:hover .about-resume-arrow {
+.header-cta-secondary:hover .header-cta-arrow {
   opacity: 1;
   transform: translate(1px, -1px);
 }
+
 
 @media (max-width: 576px) {
   .about-card {
@@ -1863,6 +1919,166 @@ footer {
   border-color: rgba(139, 92, 246, 0.4);
 }
 
+/* Each social icon takes on its own brand colour on hover */
+.footer-social-github:hover,
+[data-theme="dark"] .footer-social-github:hover {
+  color: #181717;
+  border-color: rgba(24, 23, 23, 0.45);
+  box-shadow: 0 4px 12px rgba(24, 23, 23, 0.18);
+}
+
+[data-theme="dark"] .footer-social-github:hover {
+  color: #f0f6fc; /* GitHub inverts its mark on dark backgrounds */
+  border-color: rgba(240, 246, 252, 0.45);
+  box-shadow: 0 4px 12px rgba(240, 246, 252, 0.15);
+}
+
+.footer-social-linkedin:hover,
+[data-theme="dark"] .footer-social-linkedin:hover {
+  color: #0a66c2;
+  border-color: rgba(10, 102, 194, 0.45);
+  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.22);
+}
+
+[data-theme="dark"] .footer-social-linkedin:hover {
+  color: #70b5f9; /* LinkedIn's dark-mode blue; #0a66c2 is too dim here */
+  border-color: rgba(112, 181, 249, 0.45);
+  box-shadow: 0 4px 12px rgba(112, 181, 249, 0.2);
+}
+
+/* Email tooltip: most visitors are on webmail, so show the address to copy
+   rather than relying on mailto finding a desktop client */
+.contact-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.contact-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4375rem 0.5rem 0.4375rem 0.75rem;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+  /* The email address nearly fills a 320px screen, and the icon it centres on sits
+     off-centre in the row, so cap the width and let it wrap rather than be clipped */
+  max-width: calc(100vw - 1.5rem);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 10;
+}
+
+[data-theme="dark"] .contact-tip {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Stays open while the pointer travels into it, so the copy button is reachable */
+.contact-wrap:hover .contact-tip,
+.contact-wrap:focus-within .contact-tip,
+.contact-wrap.tip-open .contact-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Little arrow pointing down at the icon */
+.contact-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--border);
+}
+
+
+.contact-value {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  user-select: all; /* one click selects the whole address */
+}
+
+.contact-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 7px;
+  background: var(--highlight);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contact-copy:hover {
+  background: var(--highlight-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.contact-tick-icon {
+  display: none;
+  color: #16a34a;
+}
+
+.contact-copy.copied .contact-copy-icon {
+  display: none;
+}
+
+.contact-copy.copied .contact-tick-icon {
+  display: block;
+}
+
+@media (max-width: 576px) {
+  /* Sit a little closer on small screens. Deliberately keeps nowrap: as a flex item,
+     a wrappable value collapses to its one-character min-content width and stacks
+     the address vertically. It fits on one line down to 320px. */
+  .contact-tip {
+    bottom: calc(100% + 8px);
+  }
+
+  .contact-value {
+    font-size: 0.75rem;
+  }
+}
+
+/* --accent is a pale background tint in light mode, so the icon needs its own
+   readable foreground: deep amber on light, lifted purple on dark */
+.footer-social-email:hover,
+[data-theme="dark"] .footer-social-email:hover {
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.45);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+[data-theme="dark"] .footer-social-email:hover {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.45);
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.2);
+}
+
+.footer-social-whatsapp:hover,
+[data-theme="dark"] .footer-social-whatsapp:hover {
+  color: #25d366;
+  border-color: rgba(37, 211, 102, 0.45);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.22);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -2015,6 +2231,11 @@ section:nth-child(4) {
   .site-logo {
     width: 44px;
     height: 44px;
+  }
+
+  .header-cta-row {
+    margin-top: 1.25rem;
+    padding-left: 0; /* drop the logo indent; the row sits flush on phones */
   }
 
   .resume-card {
@@ -4223,6 +4444,14 @@ h1, h2, h3, p {
   padding: 1.5rem;
   overflow-y: auto;
   flex-grow: 1;
+  /* Long unbreakable tokens (ARNs, repo names, URLs) would otherwise push past the
+     modal and get clipped by body's overflow-x: hidden on narrow screens */
+  overflow-wrap: break-word;
+}
+
+.readme-modal-body code,
+.readme-modal-body a {
+  overflow-wrap: anywhere;
 }
 
 .readme-loading,

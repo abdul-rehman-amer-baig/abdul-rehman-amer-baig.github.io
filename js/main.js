@@ -377,6 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
+  // The write-up the "read the latest" banner opens; update when a newer one lands
+  const LATEST_USE_CASE = 'task-scheduling';
+
   const readmeModal = document.getElementById('readmeModal');
   const readmeModalBody = document.getElementById('readmeModalBody');
   const readmeModalTitle = document.getElementById('readmeModalTitle');
@@ -510,6 +513,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    // Banner opens the latest write-up directly; its href is the same deep link, so
+    // cmd/middle-click still opens a shareable URL in a new tab
+    const wipBanner = document.querySelector('.wip-banner');
+    if (wipBanner && USE_CASES[LATEST_USE_CASE]) {
+      wipBanner.href = `${USE_CASE_HASH_PREFIX}${LATEST_USE_CASE}`;
+      wipBanner.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        // Scroll first so closing the pop-up leaves the visitor at the Use Cases section
+        document.getElementById('useCasesSection')?.scrollIntoView();
+        openReadmeModal(LATEST_USE_CASE);
+      });
+    }
+
     closeReadmeModalBtn.addEventListener('click', closeReadmeModal);
     readmeModal.querySelector('.readme-modal-overlay').addEventListener('click', closeReadmeModal);
     document.addEventListener('keydown', (e) => {
@@ -544,6 +561,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
     window.addEventListener('resize', updateArrows);
     updateArrows();
+  }
+
+  // Contact links: number/address are base64 in the markup so scrapers don't get them for free
+  document.querySelectorAll('[data-wa]').forEach((link) => {
+    const number = atob(link.dataset.wa);
+    const text = encodeURIComponent(link.dataset.waText || '');
+    link.href = `https://wa.me/${number}${text ? `?text=${text}` : ''}`;
+  });
+
+  document.querySelectorAll('[data-mail]').forEach((link) => {
+    const address = atob(link.dataset.mail);
+    const params = new URLSearchParams();
+    if (link.dataset.mailSubject) params.set('subject', link.dataset.mailSubject);
+    if (link.dataset.mailBody) params.set('body', link.dataset.mailBody);
+    const query = params.toString().replace(/\+/g, '%20'); // mail clients want %20, not +
+    link.href = `mailto:${address}${query ? `?${query}` : ''}`;
+  });
+
+  // Contact tooltips: show the address/number itself. mailto only helps visitors with a
+  // desktop client, and plenty of people would rather save the number than open a chat.
+  const noHover = window.matchMedia('(hover: none)').matches;
+
+  document.querySelectorAll('.contact-wrap').forEach((wrap) => {
+    const link = wrap.querySelector('[data-mail], [data-wa]');
+    const valueEl = wrap.querySelector('.contact-value');
+    const copyBtn = wrap.querySelector('.contact-copy');
+    if (!link || !valueEl || !copyBtn) return;
+
+    const copyValue = link.dataset.mail ? atob(link.dataset.mail) : `+${atob(link.dataset.wa)}`;
+    valueEl.textContent = link.dataset.waDisplay || copyValue;
+
+    const defaultLabel = copyBtn.getAttribute('aria-label');
+    copyBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // A pointer click leaves focus on the button, and :focus-within would keep this
+      // tooltip open after the pointer moves to the other icon. detail === 0 means
+      // keyboard activation, where focus must stay put.
+      if (e.detail > 0) copyBtn.blur();
+      try {
+        await navigator.clipboard.writeText(copyValue);
+      } catch {
+        // Clipboard blocked (insecure context): select the text so Cmd/Ctrl+C works
+        const range = document.createRange();
+        range.selectNodeContents(valueEl);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return;
+      }
+      copyBtn.classList.add('copied');
+      copyBtn.setAttribute('aria-label', copyBtn.dataset.copiedLabel);
+      setTimeout(() => {
+        copyBtn.classList.remove('copied');
+        copyBtn.setAttribute('aria-label', defaultLabel);
+      }, 2000);
+    });
+
+    // No hover on touch: first tap reveals the tooltip, a second follows the link
+    if (noHover) {
+      link.addEventListener('click', (e) => {
+        if (!wrap.classList.contains('tip-open')) {
+          e.preventDefault();
+          // Only one tooltip open at a time
+          document.querySelectorAll('.contact-wrap.tip-open').forEach((w) => w.classList.remove('tip-open'));
+          wrap.classList.add('tip-open');
+        }
+      });
+    }
+  });
+
+  if (noHover) {
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.contact-wrap')) {
+        document.querySelectorAll('.contact-wrap.tip-open').forEach((w) => w.classList.remove('tip-open'));
+      }
+    });
   }
 });
 
