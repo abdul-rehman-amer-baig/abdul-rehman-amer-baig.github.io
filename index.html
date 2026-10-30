@@ -6,34 +6,30 @@
   <title>Abdul Rehman Amer Baig</title>
   <link rel="icon" type="image/svg+xml" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23fef9e6'/%3E%3Ccircle cx='24' cy='14' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='13' cy='34' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='35' cy='34' r='3.25' fill='%23d97706'/%3E%3Cpath d='M24 17.25v6.5M24 23.75l-9 3.25M24 23.75l9 3.25' stroke='%23d97706' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
 
-  <!-- Bootstrap CSS -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
-  
-  <!-- Google Fonts - Poppins (Highly Rated) -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/main.css" />
 
-  <!-- marked.js - renders use-case README.md content inside the modal -->
   <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js" defer></script>
 </head>
-
 
 <body>
   <nav class="topnav" id="topNav">
     <div class="topnav-inner">
       <a href="#aboutSection" class="topnav-link active" data-section="aboutSection">About</a>
       <a href="#awardsSection" class="topnav-link" data-section="awardsSection">Awards</a>
-      <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Use Cases</a>    </div>
+      <a href="#useCasesSection" class="topnav-link" data-section="useCasesSection">Writings</a>    </div>
     <span class="theme-toggle-anchor" id="themeToggleDockAnchor" aria-hidden="true"></span>
   </nav>
 
-  <!-- Single theme toggle button: always fixed, animates between the header slot and the nav-docked slot -->
   <button class="theme-toggle theme-toggle-floating" id="themeToggle" aria-label="Toggle dark mode">
     <span class="theme-icon">🌙</span>
   </button>
@@ -86,7 +82,6 @@
       </div>
     </header>
 
-    <!-- About -->
     <section class="mb-5" id="aboutSection">
       <div class="about-card">
         <p class="about-text">I'm a Software Engineer with over a year and a half of experience, working across <strong>healthcare, talent, and jobs board products</strong>. I build with Python, FastAPI and PostgreSQL, and work closely with AWS services, integrations like Stripe and Firebase, and plenty of other technologies along the way. More recently I've been building AI agent pipelines with FastMCP and Claude.</p>
@@ -217,165 +212,215 @@
 
     <section class="mb-5" id="useCasesSection">
       <div class="section-header">
-        <h2 class="section-title">Use Cases</h2>
+        <h2 class="section-title">Writings</h2>
         <p class="section-subtitle">Deep dives into system design problems I've worked through, focused on the reasoning behind the architecture, not just the result</p>
       </div>
 
-      <div class="usecase-row-wrap">
-        <button type="button" class="usecase-arrow usecase-arrow-prev" id="usecasePrev" aria-label="Previous use case">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button type="button" class="usecase-arrow usecase-arrow-next" id="usecaseNext" aria-label="Next use case">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-
-      <div class="project-showcase usecase-list">
-        <!-- Task Scheduling Use Case -->
-        <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-task-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-scheduling">
-          <div class="showcase-card-inner">
-            <div class="showcase-card-top">
-              <div class="showcase-icon-wrapper showcase-icon-teal">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="9"/>
-                  <path d="M12 7v5l3 3"/>
-                </svg>
-              </div>
-              <div class="showcase-badges">
-                <span class="showcase-badge showcase-badge-prod">Production</span>
-              </div>
-            </div>
-            <div class="showcase-card-body">
-              <h3 class="showcase-title">One-Off Task Scheduling</h3>
-              <div class="usecase-flow-wrap">
-                <ol class="usecase-flow" aria-label="Request flow of the final design">
-                  <li class="usecase-flow-node">
-                    <span class="usecase-flow-name">FastAPI</span>
-                    <span class="usecase-flow-role">creates schedule</span>
-                  </li>
-                  <li class="usecase-flow-node usecase-flow-node-key">
-                    <span class="usecase-flow-name">EventBridge</span>
-                    <span class="usecase-flow-role">Scheduler</span>
-                  </li>
-                  <li class="usecase-flow-node usecase-flow-node-key">
-                    <span class="usecase-flow-name">Lambda</span>
-                    <span class="usecase-flow-role">+ Sentry</span>
-                  </li>
-                  <li class="usecase-flow-node">
-                    <span class="usecase-flow-name">FastAPI</span>
-                    <span class="usecase-flow-role">runs task</span>
-                  </li>
-                </ol>
-                <p class="usecase-ruled-out">
-                  <span class="usecase-ruled-out-label">Ruled out</span>
-                  <del>Celery Beat + Redis</del>
-                  <span aria-hidden="true">·</span>
-                  <del>Redis ETA queue</del>
-                </p>
-              </div>
-              <p class="showcase-desc">One service that runs time-based tasks at an exact moment: publishing scheduled news and jobs, and hard deleting accounts. Built on EventBridge Scheduler and Lambda, with least-privilege IAM, a secret-protected internal endpoint and Sentry alerting.</p>
-              <div class="showcase-tech-stack">
-                <span class="tech-pill">Python</span>
-                <span class="tech-pill">FastAPI</span>
-                <span class="tech-pill">Celery</span>
-                <span class="tech-pill">Redis</span>
-                <span class="tech-pill">AWS EventBridge</span>
-                <span class="tech-pill">AWS Lambda</span>
-                <span class="tech-pill">Sentry</span>
-                <span class="tech-pill">Task Scheduling</span>
-              </div>
-            </div>
-            <div class="showcase-card-footer">
-              <span class="showcase-link-text">Read Use Case</span>
-              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 17L17 7M17 7H7M17 7v10"/>
-              </svg>
-            </div>
-          </div>
-          <div class="showcase-glow showcase-glow-teal"></div>
-        </a>
-
-        <!-- URL Shortener Use Case (side project) -->
-        <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="url-shortener">
-          <div class="showcase-card-inner">
-            <div class="showcase-card-top">
-              <div class="showcase-icon-wrapper showcase-icon-amber">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                </svg>
-              </div>
-              <div class="showcase-badges">
-                <span class="showcase-badge">Side Project</span>
-              </div>
-            </div>
-            <div class="showcase-card-body">
-              <h3 class="showcase-title">URL Shortener</h3>
-              <div class="showcase-image-wrapper" data-image-url="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" data-image-title="URL Shortener Architecture">
-                <img src="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" alt="URL Shortener Architecture" class="showcase-image" loading="lazy" />
-                <div class="showcase-image-overlay">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
-                  <span>Click to expand</span>
+      <div class="writings-wrap" id="writings">
+        <div class="writings-stage">
+          <div class="writings" id="writingsTrack">
+            <a href="https://github.com/abdul-rehman-amer-baig/ai-prescribing-templates" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="ai-prescribing-templates">
+              <div class="showcase-card-inner">
+                <div class="showcase-card-top">
+                  <div class="showcase-icon-wrapper showcase-icon-lime">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="8" y="2" width="8" height="4" rx="1"/>
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                      <path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>
+                    </svg>
+                  </div>
+                  <div class="showcase-badges">
+                    <span class="showcase-badge showcase-badge-award" title="Recognised with a Certificate of Achievement">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89L17 22l-5-3-5 3 1.52-9.11"/></svg>
+                      Awarded
+                    </span>
+                    <span class="showcase-badge showcase-badge-prod">Production</span>
+                  </div>
+                </div>
+                <div class="showcase-card-body">
+                  <h3 class="showcase-title">AI Prescribing Template Generator</h3>
+                  <div class="usecase-compare usecase-compare-lime">
+                    <div class="usecase-compare-row">
+                      <span class="usecase-compare-label">Before</span>
+                      <span class="usecase-compare-steps">Engineers built every form<span class="usecase-compare-note">each change meant another round</span></span>
+                      <span class="usecase-compare-time">~1 week</span>
+                    </div>
+                    <div class="usecase-compare-row usecase-compare-row-after">
+                      <span class="usecase-compare-label">After</span>
+                      <span class="usecase-compare-steps">Admins describe it, AI builds it<span class="usecase-compare-note">reviewed by an admin before going live</span></span>
+                      <span class="usecase-compare-time">~5 min</span>
+                    </div>
+                  </div>
+                  <p class="showcase-desc">Admins describe what a client needs and an agent builds the prescribing template, reusing our FastAPI routes as MCP tools and fixing its own output until it passes our DSL validation. Progress streams live over SSE, and nothing goes live until an admin publishes it.</p>
+                </div>
+                <div class="showcase-tech-stack">
+                  <span class="tech-pill">Python</span>
+                  <span class="tech-pill">FastAPI</span>
+                  <span class="tech-pill">Pydantic AI</span>
+                  <span class="tech-pill">FastMCP</span>
+                  <span class="tech-pill">Claude</span>
+                  <span class="tech-pill">SSE</span>
+                  <span class="tech-pill">PostgreSQL</span>
+                  <span class="tech-pill">Logfire</span>
+                </div>
+                <div class="showcase-card-footer">
+                  <span class="showcase-link-text">Read</span>
+                  <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
                 </div>
               </div>
-              <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>Built to see how read replicas really behave in practice, with nginx simulating an API gateway in front of them.</p>
-              <p class="showcase-desc">Separate read and write services, three read replicas load-balanced by nginx, and Redis caching with LFU eviction for a read-heavy workload. I also documented where the design falls short, from single points of failure to cache stampedes.</p>
-              <div class="showcase-tech-stack">
-                <span class="tech-pill">Python</span>
-                <span class="tech-pill">FastAPI</span>
-                <span class="tech-pill">PostgreSQL</span>
-                <span class="tech-pill">Redis</span>
-                <span class="tech-pill">nginx</span>
-                <span class="tech-pill">Docker Compose</span>
-                <span class="tech-pill">Scaling Reads</span>
-              </div>
-            </div>
-            <div class="showcase-card-footer">
-              <span class="showcase-link-text">Read Use Case</span>
-              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 17L17 7M17 7H7M17 7v10"/>
-              </svg>
-            </div>
-          </div>
-          <div class="showcase-glow showcase-glow-amber"></div>
-        </a>
+              <div class="showcase-glow showcase-glow-lime"></div>
+            </a>
 
-        <!-- Task Tracker Use Case (side project) -->
-        <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-tracker">
-          <div class="showcase-card-inner">
-            <div class="showcase-card-top">
-              <div class="showcase-icon-wrapper showcase-icon-blue">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 11l3 3L22 4"/>
-                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                </svg>
+            <a href="https://github.com/abdul-rehman-amer-baig/usecase-system-design-task-scheduling" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-scheduling">
+              <div class="showcase-card-inner">
+                <div class="showcase-card-top">
+                  <div class="showcase-icon-wrapper showcase-icon-teal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9"/>
+                      <path d="M12 7v5l3 3"/>
+                    </svg>
+                  </div>
+                  <div class="showcase-badges">
+                    <span class="showcase-badge showcase-badge-prod">Production</span>
+                  </div>
+                </div>
+                <div class="showcase-card-body">
+                  <h3 class="showcase-title">One-Off Task Scheduling</h3>
+                  <div class="usecase-flow-wrap">
+                    <ol class="usecase-flow" aria-label="Request flow of the final design">
+                      <li class="usecase-flow-node">
+                        <span class="usecase-flow-name">FastAPI</span>
+                        <span class="usecase-flow-role">creates schedule</span>
+                      </li>
+                      <li class="usecase-flow-node usecase-flow-node-key">
+                        <span class="usecase-flow-name">EventBridge</span>
+                        <span class="usecase-flow-role">Scheduler</span>
+                      </li>
+                      <li class="usecase-flow-node usecase-flow-node-key">
+                        <span class="usecase-flow-name">Lambda</span>
+                        <span class="usecase-flow-role">+ Sentry</span>
+                      </li>
+                      <li class="usecase-flow-node">
+                        <span class="usecase-flow-name">FastAPI</span>
+                        <span class="usecase-flow-role">runs task</span>
+                      </li>
+                    </ol>
+                    <p class="usecase-ruled-out">
+                      <span class="usecase-ruled-out-label">Ruled out</span>
+                      <del>Celery Beat + Redis</del>
+                      <span aria-hidden="true">·</span>
+                      <del>Redis ETA queue</del>
+                    </p>
+                  </div>
+                  <p class="showcase-desc">One service that runs time-based tasks at an exact moment: publishing scheduled news and jobs, and hard deleting accounts. Built on EventBridge Scheduler and Lambda, with least-privilege IAM, a secret-protected internal endpoint and Sentry alerting.</p>
+                </div>
+                <div class="showcase-tech-stack">
+                  <span class="tech-pill">Python</span>
+                  <span class="tech-pill">FastAPI</span>
+                  <span class="tech-pill">Celery</span>
+                  <span class="tech-pill">Redis</span>
+                  <span class="tech-pill">AWS EventBridge</span>
+                  <span class="tech-pill">AWS Lambda</span>
+                  <span class="tech-pill">Sentry</span>
+                  <span class="tech-pill">Task Scheduling</span>
+                </div>
+                <div class="showcase-card-footer">
+                  <span class="showcase-link-text">Read</span>
+                  <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
+                </div>
               </div>
-              <div class="showcase-badges">
-                <span class="showcase-badge">Side Project</span>
+              <div class="showcase-glow showcase-glow-teal"></div>
+            </a>
+
+            <a href="https://github.com/abdul-rehman-amer-baig/system-design-url-shortener" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="url-shortener">
+              <div class="showcase-card-inner">
+                <div class="showcase-card-top">
+                  <div class="showcase-icon-wrapper showcase-icon-amber">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                  </div>
+                  <div class="showcase-badges">
+                    <span class="showcase-badge">Side Project</span>
+                  </div>
+                </div>
+                <div class="showcase-card-body">
+                  <h3 class="showcase-title">URL Shortener</h3>
+                  <div class="showcase-image-wrapper" data-image-url="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" data-image-title="URL Shortener Architecture">
+                    <img src="https://raw.githubusercontent.com/abdul-rehman-amer-baig/system-design-url-shortener/main/url-shortener-architecture.png" alt="URL Shortener Architecture" class="showcase-image" loading="lazy" />
+                    <div class="showcase-image-overlay">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+                      <span>Click to expand</span>
+                    </div>
+                  </div>
+                  <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>Built to see how read replicas really behave in practice, with nginx simulating an API gateway in front of them.</p>
+                  <p class="showcase-desc">Separate read and write services, three read replicas load-balanced by nginx, and Redis caching with LFU eviction for a read-heavy workload. I also documented where the design falls short, from single points of failure to cache stampedes.</p>
+                </div>
+                <div class="showcase-tech-stack">
+                  <span class="tech-pill">Python</span>
+                  <span class="tech-pill">FastAPI</span>
+                  <span class="tech-pill">PostgreSQL</span>
+                  <span class="tech-pill">Redis</span>
+                  <span class="tech-pill">nginx</span>
+                  <span class="tech-pill">Docker Compose</span>
+                  <span class="tech-pill">Scaling Reads</span>
+                </div>
+                <div class="showcase-card-footer">
+                  <span class="showcase-link-text">Read</span>
+                  <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
+                </div>
               </div>
-            </div>
-            <div class="showcase-card-body">
-              <h3 class="showcase-title">Task Tracker</h3>
-              <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>My first hands-on AI project, built to turn my theoretical understanding of LLMs into a working implementation.</p>
-              <p class="showcase-desc">A Python CLI where a master agent routes plain-English requests to conversation, command and code-generation agents. The command agent can only call predefined functions, and generated code is checked against Python's AST before it runs.</p>
-              <div class="showcase-tech-stack">
-                <span class="tech-pill">Python</span>
-                <span class="tech-pill">Multi-Agent AI</span>
-                <span class="tech-pill">OpenRouter</span>
-                <span class="tech-pill">pytest</span>
+              <div class="showcase-glow showcase-glow-amber"></div>
+            </a>
+
+            <a href="https://github.com/abdul-rehman-amer-baig/task-tracker" target="_blank" rel="noopener noreferrer" class="showcase-card" data-usecase="task-tracker">
+              <div class="showcase-card-inner">
+                <div class="showcase-card-top">
+                  <div class="showcase-icon-wrapper showcase-icon-blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 11l3 3L22 4"/>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                  </div>
+                  <div class="showcase-badges">
+                    <span class="showcase-badge">Side Project</span>
+                  </div>
+                </div>
+                <div class="showcase-card-body">
+                  <h3 class="showcase-title">Task Tracker</h3>
+                  <p class="showcase-callout"><span class="showcase-callout-label">Why I built it</span>My first hands-on AI project, built to turn my theoretical understanding of LLMs into a working implementation.</p>
+                  <p class="showcase-desc">A Python CLI where a master agent routes plain-English requests to conversation, command and code-generation agents. The command agent can only call predefined functions, and generated code is checked against Python's AST before it runs.</p>
+                </div>
+                <div class="showcase-tech-stack">
+                  <span class="tech-pill">Python</span>
+                  <span class="tech-pill">Multi-Agent AI</span>
+                  <span class="tech-pill">OpenRouter</span>
+                  <span class="tech-pill">pytest</span>
+                </div>
+                <div class="showcase-card-footer">
+                  <span class="showcase-link-text">Read</span>
+                  <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
+                </div>
               </div>
-            </div>
-            <div class="showcase-card-footer">
-              <span class="showcase-link-text">Read Use Case</span>
-              <svg class="showcase-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 17L17 7M17 7H7M17 7v10"/>
-              </svg>
-            </div>
+              <div class="showcase-glow showcase-glow-blue"></div>
+            </a>
           </div>
-          <div class="showcase-glow showcase-glow-blue"></div>
-        </a>
+          <p class="writings-hint" id="writingsHint" aria-hidden="true">
+            <span class="writings-hint-text"></span>
+            <svg class="writings-hint-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </p>
+        </div>
       </div>
-      </div>
-      <!-- Filled in by main.js from PLANNED_WRITE_UPS -->
+
       <div id="writeUpBacklog"></div>
     </section>
 
@@ -426,7 +471,6 @@
     </footer>
   </main>
 
-  <!-- Image Modal -->
   <div class="image-modal" id="imageModal">
     <div class="image-modal-overlay"></div>
     <div class="image-modal-content">
@@ -450,14 +494,13 @@
     </div>
   </div>
 
-  <!-- Use Case (README) Modal -->
   <div class="readme-modal" id="readmeModal">
     <div class="readme-modal-overlay"></div>
     <div class="readme-modal-content">
       <div class="readme-modal-header">
-        <h3 class="readme-modal-title" id="readmeModalTitle">Use Case</h3>
+        <h3 class="readme-modal-title" id="readmeModalTitle">Writing</h3>
         <div class="readme-modal-actions">
-          <button type="button" class="readme-modal-repo-link readme-modal-copy-link" id="readmeModalCopyLink" aria-label="Copy link to this use case">
+          <button type="button" class="readme-modal-repo-link readme-modal-copy-link" id="readmeModalCopyLink" aria-label="Copy link to this writing">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             <span id="readmeModalCopyLabel">Copy link</span>
           </button>
@@ -469,7 +512,7 @@
         </div>
       </div>
       <div class="readme-modal-body" id="readmeModalBody">
-        <div class="readme-loading">Loading use case…</div>
+        <div class="readme-loading">Loading…</div>
       </div>
     </div>
   </div>

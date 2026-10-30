@@ -1,17 +1,10 @@
-/**
- * Main script – portfolio logic, image modal, theme.
- */
-
-// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
-  // Image Modal functionality
   const imageModal = document.getElementById('imageModal');
   const closeImageModal = document.getElementById('closeImageModal');
   const modalImage = document.getElementById('modalImage');
   const modalImageTitle = document.getElementById('modalImageTitle');
   const imageModalOverlay = imageModal.querySelector('.image-modal-overlay');
 
-  // Zoom & pan state
   const modalImageWrap = document.getElementById('modalImageWrap');
   const zoomInBtn = document.getElementById('zoomIn');
   const zoomOutBtn = document.getElementById('zoomOut');
@@ -46,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function zoom(delta) {
     const newScale = Math.min(Math.max(0.25, scale + delta), 5);
-    // Zoom toward center
+
     const rect = modalImageWrap.getBoundingClientRect();
     const cx = rect.width / 2;
     const cy = rect.height / 2;
@@ -61,14 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
   zoomOutBtn.addEventListener('click', () => zoom(-0.3));
   zoomResetBtn.addEventListener('click', resetZoom);
 
-  // Mouse wheel zoom
   modalImageWrap.addEventListener('wheel', (e) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -0.15 : 0.15;
     zoom(delta);
   }, { passive: false });
 
-  // Drag to pan
   modalImageWrap.addEventListener('mousedown', (e) => {
     if (scale <= 1) return;
     isDragging = true;
@@ -92,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modalImageWrap.classList.remove('dragging');
   });
 
-  // Touch drag to pan
   modalImageWrap.addEventListener('touchstart', (e) => {
     if (scale <= 1 || e.touches.length !== 1) return;
     isDragging = true;
@@ -115,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modalImageWrap.classList.remove('dragging');
   });
 
-  // Handle image clicks (showcase cards)
   document.addEventListener('click', (e) => {
     const imageWrapper = e.target.closest('.showcase-image-wrapper');
     if (imageWrapper) {
@@ -141,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
   closeImageModal.addEventListener('click', closeModal);
   imageModalOverlay.addEventListener('click', closeModal);
 
-  // Close image modal on Escape key (takes priority when stacked above the readme modal)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && imageModal.classList.contains('show')) {
       closeModal();
@@ -149,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Awards timeline progress bar
   const timelineProgress = document.getElementById('timelineProgress');
   const awardsTimeline = document.querySelector('.awards-timeline');
   if (timelineProgress && awardsTimeline) {
@@ -165,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgress();
   }
 
-  // Top nav
   const topNav = document.getElementById('topNav');
   const navLinks = document.querySelectorAll('.topnav-link');
   const navSections = Array.from(navLinks).map(link => ({
@@ -183,9 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const vibrate = (pattern) => navigator.vibrate?.(pattern);
 
-  // Theme toggle docking: a single fixed button whose top/left are driven to
-  // match either the header anchor or the nav anchor, animated via CSS transition
-  // on those properties, so it reads as one element traveling, not two fading in/out.
   const themeToggleEl = document.getElementById('themeToggle');
   const themeToggleHomeAnchor = document.getElementById('themeToggleHomeAnchor');
   const themeToggleDockAnchor = document.getElementById('themeToggleDockAnchor');
@@ -198,9 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggleEl.style.left = `${rect.left}px`;
   };
 
-  // Sums the offsetParent chain. Unlike getBoundingClientRect this ignores transforms, so the
-  // header's fadeInUp and navAppear's wobble keyframes can't skew the measured resting spot,
-  // and it's independent of scroll position (e.g. a mobile URL-bar resize while scrolled).
   const restingOffset = (el) => {
     let top = 0;
     let left = 0;
@@ -222,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (themeToggleEl && themeToggleHomeAnchor && themeToggleDockAnchor) {
-    // Place instantly at the header slot on load, no transition, then re-enable it.
     measureAnchors();
     themeToggleEl.style.transition = 'none';
     applyRect(homeRect);
@@ -230,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
       themeToggleEl.style.transition = '';
     });
 
-    // Web fonts and late styles shift the header after first paint; re-measure once they land.
     window.addEventListener('resize', syncToggle);
     window.addEventListener('load', syncToggle);
     document.fonts?.ready.then(syncToggle);
@@ -240,14 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastActive = null;
   let navVisible = false;
   const onScroll = () => {
-    // Show/hide navbar based on scroll position
     const shouldShow = window.scrollY > SCROLL_THRESHOLD;
     if (shouldShow && !navVisible) {
       topNav.classList.remove('visible');
-      void topNav.offsetWidth; // reflow
+      void topNav.offsetWidth;
       topNav.classList.add('visible');
       navVisible = true;
-      // Funny landing thud: strong-pause-soft-pause-soft
+
       vibrate([80, 40, 30, 20, 15]);
     } else if (!shouldShow && navVisible) {
       topNav.classList.remove('visible');
@@ -259,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
       applyRect(toggleDocked ? dockRect : homeRect);
     }
 
-    // Active section tracking
     const scrollPos = window.scrollY + window.innerHeight / 3;
     let current = navSections[0];
     for (const item of navSections) {
@@ -273,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Short tap buzz on nav link click
   navLinks.forEach(link => {
     link.addEventListener('pointerdown', () => vibrate(12));
   });
@@ -281,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // Skills marquee: auto-scrolls, pauses on hover, stays manually scrollable/draggable
   const skillsMarquee = document.getElementById('skillsMarquee');
   if (skillsMarquee) {
     const track = document.getElementById('skillsTrack');
@@ -306,8 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
       resumeTimer = setTimeout(() => { paused = false; }, 2000);
     };
 
-    // scrollLeft is rounded to an integer by the browser, so a sub-pixel
-    // per-frame increment must be accumulated in JS, not read back each tick.
     let scrollPos = skillsMarquee.scrollLeft;
     let wasIdle = true;
 
@@ -316,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wasIdle = true;
       } else {
         if (wasIdle) {
-          scrollPos = skillsMarquee.scrollLeft; // resync after manual interaction
+          scrollPos = skillsMarquee.scrollLeft;
           wasIdle = false;
         }
         scrollPos += SPEED;
@@ -353,8 +325,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Use Case (README) Modal
   const USE_CASES = {
+    'ai-prescribing-templates': {
+      owner: 'abdul-rehman-amer-baig',
+      repo: 'ai-prescribing-templates',
+      branch: 'main',
+      title: 'AI Prescribing Template Generator',
+    },
     'task-scheduling': {
       owner: 'abdul-rehman-amer-baig',
       repo: 'usecase-system-design-task-scheduling',
@@ -365,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
       owner: 'abdul-rehman-amer-baig',
       repo: 'system-design-url-shortener',
       branch: 'main',
-      // The write-up lives in the project folder, not the repo-root README
+
       dir: 'url-shortener',
       title: 'URL Shortener',
     },
@@ -377,8 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   };
 
-  // The write-up the "read the latest" banner opens; update when a newer one lands
-  const LATEST_USE_CASE = 'task-scheduling';
+  const LATEST_USE_CASE = 'ai-prescribing-templates';
 
   const readmeModal = document.getElementById('readmeModal');
   const readmeModalBody = document.getElementById('readmeModalBody');
@@ -389,15 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const readmeModalCopyLabel = document.getElementById('readmeModalCopyLabel');
   const readmeCache = {};
 
-  // Shareable deep links: each use case pop-up lives at #use-case/<key>
   const USE_CASE_HASH_PREFIX = '#use-case/';
   const useCaseKeyFromHash = () => {
     if (!location.hash.startsWith(USE_CASE_HASH_PREFIX)) return null;
     const key = decodeURIComponent(location.hash.slice(USE_CASE_HASH_PREFIX.length));
     return USE_CASES[key] ? key : null;
   };
-  // True when this page pushed the history entry for the open pop-up, so closing can go
-  // back to it; false when the visitor arrived via a shared link (nothing to go back to)
+
   let pushedUseCaseEntry = false;
 
   async function openReadmeModal(key, { updateUrl = true } = {}) {
@@ -417,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     readmeModalTitle.textContent = useCase.title;
     readmeModalRepoLink.href = repoUrl;
-    readmeModalBody.innerHTML = '<div class="readme-loading">Loading use case…</div>';
+    readmeModalBody.innerHTML = '<div class="readme-loading">Loading…</div>';
     readmeModal.classList.add('show');
     document.body.style.overflow = 'hidden';
 
@@ -429,6 +403,11 @@ document.addEventListener('DOMContentLoaded', () => {
         readmeCache[key] = marked.parse(markdown);
       }
       readmeModalBody.innerHTML = readmeCache[key];
+
+      readmeModalBody.querySelectorAll('pre code[class*="language-"]').forEach((block) => {
+        const lang = block.className.match(/language-(\S+)/)[1];
+        if (window.hljs && hljs.getLanguage(lang)) hljs.highlightElement(block);
+      });
       readmeModalBody.querySelectorAll('img').forEach((img) => {
         const src = img.getAttribute('src');
         if (src && !/^https?:\/\//.test(src)) {
@@ -443,8 +422,8 @@ document.addEventListener('DOMContentLoaded', () => {
           document.body.style.overflow = 'hidden';
         });
       });
-    } catch (err) {
-      readmeModalBody.innerHTML = `<div class="readme-error">Couldn't load this use case right now. <a href="${repoUrl}" target="_blank" rel="noopener noreferrer">View it on GitHub instead</a>.</div>`;
+    } catch {
+      readmeModalBody.innerHTML = `<div class="readme-error">Couldn't load this writing right now. <a href="${repoUrl}" target="_blank" rel="noopener noreferrer">View it on GitHub instead</a>.</div>`;
     }
   }
 
@@ -457,18 +436,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!useCaseKeyFromHash()) {
       hideReadmeModal();
     } else if (pushedUseCaseEntry) {
-      // Pop our own entry; the popstate handler hides the modal
       pushedUseCaseEntry = false;
       history.back();
     } else {
-      // Arrived via a shared link: drop the hash without adding history
       history.replaceState(null, '', location.pathname + location.search);
       hideReadmeModal();
     }
   }
 
   if (readmeModal) {
-    // Back/forward: open or close the pop-up to match the URL
     window.addEventListener('popstate', () => {
       const key = useCaseKeyFromHash();
       if (key) {
@@ -479,7 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Shared link on load: bring the Use Cases section into view behind the pop-up, then open it
     const initialKey = useCaseKeyFromHash();
     if (initialKey) {
       document.getElementById('useCasesSection')?.scrollIntoView();
@@ -494,7 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
         readmeModalCopyLabel.textContent = 'Copied!';
         readmeModalCopyLink.classList.add('copied');
       } catch {
-        // Clipboard blocked (e.g. insecure context): leave the URL in the address bar to copy by hand
         readmeModalCopyLabel.textContent = 'Copy from address bar';
       }
       setTimeout(() => {
@@ -507,21 +481,19 @@ document.addEventListener('DOMContentLoaded', () => {
       card.addEventListener('click', (e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
         e.preventDefault();
-        // Diagram clicks open the image viewer (document-level handler), not the README
+
         if (e.target.closest('.showcase-image-wrapper')) return;
         openReadmeModal(card.dataset.usecase);
       });
     });
 
-    // Banner opens the latest write-up directly; its href is the same deep link, so
-    // cmd/middle-click still opens a shareable URL in a new tab
     const wipBanner = document.querySelector('.wip-banner');
     if (wipBanner && USE_CASES[LATEST_USE_CASE]) {
       wipBanner.href = `${USE_CASE_HASH_PREFIX}${LATEST_USE_CASE}`;
       wipBanner.addEventListener('click', (e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
         e.preventDefault();
-        // Scroll first so closing the pop-up leaves the visitor at the Use Cases section
+
         document.getElementById('useCasesSection')?.scrollIntoView();
         openReadmeModal(LATEST_USE_CASE);
       });
@@ -534,36 +506,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Use Cases row: prev/next arrows step one card at a time; disabled at either end
-  const usecaseRow = document.querySelector('.usecase-list');
-  const usecasePrev = document.getElementById('usecasePrev');
-  const usecaseNext = document.getElementById('usecaseNext');
-  if (usecaseRow && usecasePrev && usecaseNext) {
-    const step = () => {
-      const card = usecaseRow.querySelector('.showcase-card');
-      const gap = parseFloat(getComputedStyle(usecaseRow).columnGap) || 0;
-      return card ? card.offsetWidth + gap : usecaseRow.clientWidth;
-    };
-
-    const updateArrows = () => {
-      const maxScroll = usecaseRow.scrollWidth - usecaseRow.clientWidth;
-      usecasePrev.disabled = usecaseRow.scrollLeft <= 1;
-      usecaseNext.disabled = usecaseRow.scrollLeft >= maxScroll - 1;
-    };
-
-    usecasePrev.addEventListener('click', () => usecaseRow.scrollBy({ left: -step(), behavior: 'smooth' }));
-    usecaseNext.addEventListener('click', () => usecaseRow.scrollBy({ left: step(), behavior: 'smooth' }));
-
-    let arrowFrame = null;
-    usecaseRow.addEventListener('scroll', () => {
-      cancelAnimationFrame(arrowFrame);
-      arrowFrame = requestAnimationFrame(updateArrows);
-    }, { passive: true });
-    window.addEventListener('resize', updateArrows);
-    updateArrows();
-  }
-
-  // Contact links: number/address are base64 in the markup so scrapers don't get them for free
   document.querySelectorAll('[data-wa]').forEach((link) => {
     const number = atob(link.dataset.wa);
     const text = encodeURIComponent(link.dataset.waText || '');
@@ -575,16 +517,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams();
     if (link.dataset.mailSubject) params.set('subject', link.dataset.mailSubject);
     if (link.dataset.mailBody) params.set('body', link.dataset.mailBody);
-    const query = params.toString().replace(/\+/g, '%20'); // mail clients want %20, not +
+    const query = params.toString().replace(/\+/g, '%20');
     link.href = `mailto:${address}${query ? `?${query}` : ''}`;
   });
 
-  /* ---------------------------------------------------------------------------
-     Write-up backlog: everything queued up, grouped by theme behind a toggle.
-     Add an entry here and the counts, progress bar and groups all follow.
-     --------------------------------------------------------------------------- */
   const PLANNED_WRITE_UPS = [
-    { title: 'AI prescribing templates', theme: 'AI & Healthcare' },
     { title: 'The Twilio bill that doubled', theme: 'Cost & Performance' },
     { title: 'Building recurring subscriptions on Stripe', theme: 'Payments' },
     { title: 'Splitting payments across vendors with Mollie', theme: 'Payments' },
@@ -600,23 +537,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const total = published + PLANNED_WRITE_UPS.length;
   const percent = Math.round((published / total) * 100);
 
-  // The top banner carries the same progress, so both move together
   const backlogBanner = document.querySelector('.wip-banner');
   if (backlogBanner && !backlogBanner.querySelector('.wu-banner-progress')) {
     const progress = document.createElement('span');
     progress.className = 'wu-banner-progress';
-    // The bar is decorative here: the count beside it already states the numbers,
-    // and marking it up as a progressbar too would announce them twice
+
     progress.innerHTML = `
       <span class="wu-track wu-track-mini" aria-hidden="true"><span class="wu-fill" style="width: ${percent}%"></span></span>
       <span class="wu-banner-count">${published}/${total}</span>`;
     backlogBanner.insertBefore(progress, backlogBanner.querySelector('.wip-banner-arrow'));
   }
 
-  /* The backlog panel is a working document, so it only shows while developing:
-     on localhost / Live Server / a file:// open, or with ?backlog in the URL to
-     spot-check it on the published site. Note this only hides it — the titles are
-     still in this file, so treat them as public. */
   const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]', ''];
   const showBacklog =
     LOCAL_HOSTS.includes(location.hostname) ||
@@ -674,8 +605,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Contact tooltips: show the address/number itself. mailto only helps visitors with a
-  // desktop client, and plenty of people would rather save the number than open a chat.
+  const writingsWrap = document.getElementById('writings');
+  const writingsTrack = document.getElementById('writingsTrack');
+  if (writingsWrap && writingsTrack) {
+    const cards = [...writingsTrack.querySelectorAll(':scope > .showcase-card')];
+    const phoneLayout = window.matchMedia('(max-width: 767.98px)');
+    cards.forEach((card, i) => card.style.setProperty('--stack-i', i));
+
+    const hintText = writingsWrap.querySelector('.writings-hint-text');
+    const updateWindowFade = () => {
+      const end = writingsTrack.scrollTop + writingsTrack.clientHeight >= writingsTrack.scrollHeight - 2;
+      writingsWrap.classList.toggle('at-end', end);
+      const trackBottom = writingsTrack.getBoundingClientRect().bottom;
+      const remaining = cards.filter((card) => card.getBoundingClientRect().top + 60 > trackBottom).length;
+      hintText.textContent = end || !remaining
+        ? `You've seen all ${cards.length} writings`
+        : `Scroll inside for ${remaining} more`;
+    };
+    const sizeWindow = () => {
+      if (!phoneLayout.matches) {
+        writingsTrack.style.removeProperty('--window-h');
+        return;
+      }
+      const padding = parseFloat(getComputedStyle(writingsTrack).paddingTop) * 2;
+      writingsTrack.style.setProperty('--window-h', `${Math.ceil(cards[0].offsetHeight + padding + 140)}px`);
+      updateWindowFade();
+    };
+    writingsTrack.addEventListener('scroll', updateWindowFade, { passive: true });
+    phoneLayout.addEventListener('change', sizeWindow);
+    window.addEventListener('resize', sizeWindow);
+    document.fonts?.ready.then(sizeWindow);
+    sizeWindow();
+  }
+
   const noHover = window.matchMedia('(hover: none)').matches;
 
   document.querySelectorAll('.contact-wrap').forEach((wrap) => {
@@ -690,14 +652,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultLabel = copyBtn.getAttribute('aria-label');
     copyBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      // A pointer click leaves focus on the button, and :focus-within would keep this
-      // tooltip open after the pointer moves to the other icon. detail === 0 means
-      // keyboard activation, where focus must stay put.
+
       if (e.detail > 0) copyBtn.blur();
       try {
         await navigator.clipboard.writeText(copyValue);
       } catch {
-        // Clipboard blocked (insecure context): select the text so Cmd/Ctrl+C works
         const range = document.createRange();
         range.selectNodeContents(valueEl);
         const selection = window.getSelection();
@@ -713,12 +672,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 2000);
     });
 
-    // No hover on touch: first tap reveals the tooltip, a second follows the link
     if (noHover) {
       link.addEventListener('click', (e) => {
         if (!wrap.classList.contains('tip-open')) {
           e.preventDefault();
-          // Only one tooltip open at a time
+
           document.querySelectorAll('.contact-wrap.tip-open').forEach((w) => w.classList.remove('tip-open'));
           wrap.classList.add('tip-open');
         }
@@ -735,7 +693,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Favicon by theme (light = black on cream, dark = purple on dark)
 const FAVICON_LIGHT = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23fef9e6'/%3E%3Ccircle cx='24' cy='14' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='13' cy='34' r='3.25' fill='%23d97706'/%3E%3Ccircle cx='35' cy='34' r='3.25' fill='%23d97706'/%3E%3Cpath d='M24 17.25v6.5M24 23.75l-9 3.25M24 23.75l9 3.25' stroke='%23d97706' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E";
 const FAVICON_DARK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23151515'/%3E%3Ccircle cx='24' cy='14' r='3.25' fill='%23c4b5fd'/%3E%3Ccircle cx='13' cy='34' r='3.25' fill='%23c4b5fd'/%3E%3Ccircle cx='35' cy='34' r='3.25' fill='%23c4b5fd'/%3E%3Cpath d='M24 17.25v6.5M24 23.75l-9 3.25M24 23.75l9 3.25' stroke='%23c4b5fd' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E";
 
@@ -744,7 +701,6 @@ function setFavicon(theme) {
   if (link) link.href = theme === 'dark' ? FAVICON_DARK : FAVICON_LIGHT;
 }
 
-// Theme Toggle Functionality (header button + floating button next to the sticky nav)
 const themeToggles = Array.from(document.querySelectorAll('.theme-toggle'));
 if (themeToggles.length) {
   const html = document.documentElement;
