@@ -1906,27 +1906,18 @@ h1, h2, h3, p {
 
 .writings {
   display: grid;
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
 
 .writings .showcase-card-top {
   margin-bottom: 0.9rem;
 }
 
-.writings .showcase-card {
-  position: sticky;
-  top: calc(5.5rem + var(--stack-i, 0) * 1rem);
-}
-
-.writings .showcase-card-inner {
-  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.12);
-}
-
 .writings-hint {
   display: none;
 }
 
-@media (max-width: 767.98px) {
+@media (min-width: 768px) {
   .writings-stage {
     padding: 0.5rem;
     border: 1.5px solid rgba(217, 119, 6, 0.55);
@@ -1965,7 +1956,6 @@ h1, h2, h3, p {
   }
 
   .writings {
-    gap: 0.75rem;
     max-height: min(var(--window-h, 640px), 78vh);
     max-height: min(var(--window-h, 640px), 78svh);
     padding: 0.25rem 0.4rem 0.25rem 0.25rem;
@@ -1989,14 +1979,20 @@ h1, h2, h3, p {
     border-radius: 999px;
     background: var(--border-hover);
   }
+}
+
+@media (max-width: 767.98px) {
+  .writings {
+    gap: 1.5rem;
+  }
 
   .writings .showcase-card {
-    position: relative;
-    top: auto;
+    position: sticky;
+    top: var(--stick-top, 5.5rem);
   }
 
   .writings .showcase-card-inner {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.12);
   }
 }
 

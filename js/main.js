@@ -610,7 +610,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (writingsWrap && writingsTrack) {
     const cards = [...writingsTrack.querySelectorAll(':scope > .showcase-card')];
     const phoneLayout = window.matchMedia('(max-width: 767.98px)');
-    cards.forEach((card, i) => card.style.setProperty('--stack-i', i));
+
+    const placeStack = () => {
+      const navOffset = 88;
+      cards.forEach((card, i) => {
+        const top = Math.min(navOffset + i * 16, window.innerHeight - card.offsetHeight - 16);
+        card.style.setProperty('--stick-top', `${Math.round(top)}px`);
+      });
+    };
 
     const hintText = writingsWrap.querySelector('.writings-hint-text');
     const updateWindowFade = () => {
@@ -622,20 +629,29 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `You've seen all ${cards.length} writings`
         : `Scroll inside for ${remaining} more`;
     };
+
     const sizeWindow = () => {
-      if (!phoneLayout.matches) {
-        writingsTrack.style.removeProperty('--window-h');
-        return;
-      }
       const padding = parseFloat(getComputedStyle(writingsTrack).paddingTop) * 2;
       writingsTrack.style.setProperty('--window-h', `${Math.ceil(cards[0].offsetHeight + padding + 140)}px`);
       updateWindowFade();
     };
-    writingsTrack.addEventListener('scroll', updateWindowFade, { passive: true });
-    phoneLayout.addEventListener('change', sizeWindow);
-    window.addEventListener('resize', sizeWindow);
-    document.fonts?.ready.then(sizeWindow);
-    sizeWindow();
+
+    const applyLayout = () => {
+      if (phoneLayout.matches) {
+        writingsTrack.style.removeProperty('--window-h');
+        writingsTrack.scrollTop = 0;
+        placeStack();
+      } else {
+        cards.forEach((card) => card.style.removeProperty('--stick-top'));
+        sizeWindow();
+      }
+    };
+
+    writingsTrack.addEventListener('scroll', () => !phoneLayout.matches && updateWindowFade(), { passive: true });
+    phoneLayout.addEventListener('change', applyLayout);
+    window.addEventListener('resize', applyLayout);
+    document.fonts?.ready.then(applyLayout);
+    applyLayout();
   }
 
   const noHover = window.matchMedia('(hover: none)').matches;
