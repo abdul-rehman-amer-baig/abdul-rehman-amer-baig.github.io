@@ -382,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
       history.pushState({ useCase: key }, '', `${USE_CASE_HASH_PREFIX}${key}`);
       pushedUseCaseEntry = true;
     }
+    window.goatcounter?.count?.({ path: `writings/${key}`, title: useCase.title, event: true });
     readmeModalCopyLink.classList.remove('copied');
     readmeModalCopyLabel.textContent = 'Copy link';
 
