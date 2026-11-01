@@ -743,6 +743,7 @@ if (themeToggles.length) {
       localStorage.setItem('theme', newTheme);
       themeToggles.forEach((b) => updateThemeIcon(newTheme, b.querySelector('.theme-icon')));
       setFavicon(newTheme);
+      window.goatcounter?.count?.({ path: `theme/${newTheme}`, title: `Switched to ${newTheme} mode`, event: true });
     });
   });
 }
