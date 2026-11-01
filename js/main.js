@@ -374,6 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let pushedUseCaseEntry = false;
 
+  const countWritingOpen = (key, title) => {
+    const send = () => window.goatcounter?.count?.({ path: `writings/${key}`, title, event: true });
+    if (window.goatcounter?.count) send();
+    else document.getElementById('goatcounterScript')?.addEventListener('load', send, { once: true });
+  };
+
   async function openReadmeModal(key, { updateUrl = true } = {}) {
     const useCase = USE_CASES[key];
     if (!useCase || !readmeModal) return;
@@ -382,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
       history.pushState({ useCase: key }, '', `${USE_CASE_HASH_PREFIX}${key}`);
       pushedUseCaseEntry = true;
     }
-    window.goatcounter?.count?.({ path: `writings/${key}`, title: useCase.title, event: true });
+    countWritingOpen(key, useCase.title);
     readmeModalCopyLink.classList.remove('copied');
     readmeModalCopyLabel.textContent = 'Copy link';
 
@@ -392,6 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     readmeModalTitle.textContent = useCase.title;
     readmeModalRepoLink.href = repoUrl;
+    readmeModalRepoLink.dataset.goatcounterClick = `writings/${key}/github`;
+    readmeModalRepoLink.dataset.goatcounterTitle = `${useCase.title}: View on GitHub`;
+    readmeModalCopyLink.dataset.goatcounterClick = `writings/${key}/copy-link`;
+    readmeModalCopyLink.dataset.goatcounterTitle = `${useCase.title}: Copy link`;
     readmeModalBody.innerHTML = '<div class="readme-loading">Loading…</div>';
     readmeModal.classList.add('show');
     document.body.style.overflow = 'hidden';
