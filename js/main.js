@@ -389,6 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
       pushedUseCaseEntry = true;
     }
     countWritingOpen(key, useCase.title);
+    window.clarity?.('set', 'writing', key);
+    window.clarity?.('event', `writing/${key}`);
     readmeModalCopyLink.classList.remove('copied');
     readmeModalCopyLabel.textContent = 'Copy link';
 
