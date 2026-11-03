@@ -42,6 +42,17 @@
     <span class="theme-icon">🌙</span>
   </button>
 
+  <audio id="trackAudio" src="audio/portfolio-loop.m4a" loop preload="none"></audio>
+  <button class="audio-toggle" id="audioToggle" aria-label="Play music" aria-pressed="false" data-tip="Do not press this at work">
+    <span class="audio-eq" aria-hidden="true">
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+      <span class="audio-bar"></span>
+    </span>
+    <span class="audio-label">Play the vibe</span>
+  </button>
+
   <main class="container py-5">
     <a href="#useCasesSection" class="wip-banner" data-goatcounter-click="banner/latest-writing" data-goatcounter-title="Latest writing banner">
       <span class="usecase-more-dot" aria-hidden="true"></span>
@@ -526,5 +537,6 @@
   </div>
 
   <script src="js/main.js" defer></script>
+  <script src="js/beat.js" defer></script>
 </body>
 </html>

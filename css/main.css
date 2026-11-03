@@ -2894,3 +2894,390 @@ h1, h2, h3, p {
     width: 36px;
   }
 }
+
+/* Styled on its own rather than reusing .theme-toggle, which main.js binds by class. */
+.audio-toggle {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1100;
+  height: 52px;
+  padding: 0 1.15rem 0 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  background: var(--accent-hover);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 26px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* Once it is playing it has done its job, so it recedes into a quiet control. */
+.audio-toggle.is-playing {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14), inset 0 0 0 1px var(--border);
+}
+
+.audio-toggle:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.26);
+}
+
+.audio-label {
+  white-space: nowrap;
+}
+
+/* A ring that breathes until someone has actually pressed it once. */
+@keyframes audioNudge {
+  0%   { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 0 0 0 var(--audio-ring); }
+  70%  { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 0 0 18px transparent; }
+  100% { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 0 0 0 transparent; }
+}
+
+.audio-toggle {
+  --audio-ring: rgba(252, 211, 77, 0.7);
+}
+
+[data-theme="dark"] .audio-toggle {
+  --audio-ring: rgba(167, 139, 250, 0.6);
+}
+
+.audio-toggle.nudge {
+  animation: audioNudge 2.2s ease-out infinite;
+}
+
+/* The nudge tooltip shows itself once, unprompted, on a first visit. */
+.audio-toggle.show-tip::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-toggle.nudge {
+    animation: none;
+  }
+}
+
+.audio-toggle::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.4rem 0.7rem;
+  border-radius: 10px;
+  background: var(--text-primary);
+  color: var(--bg-card);
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.audio-toggle:hover::after,
+.audio-toggle:focus-visible::after {
+  opacity: 1;
+}
+
+/* Phones don't get the music at all - the button is hidden, and js/beat.js reads
+   that back off the computed style so it never auto-resumes with no way to stop it. */
+@media (max-width: 640px) {
+  .audio-toggle {
+    display: none;
+  }
+}
+
+.audio-eq {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.audio-bar {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: #1a1a1a;
+  transform: scaleY(0.22);
+  transition: transform 0.25s ease, background 0.3s ease;
+}
+
+.audio-toggle.is-playing .audio-bar {
+  background: var(--accent-hover);
+  transition: transform 0.06s linear, background 0.3s ease;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Dance mode. js/beat.js sets --beat-0..3 every frame from the kick drum, each
+   one lagging the last by 80ms, so a pulse travels down the page instead of
+   everything twitching in unison.
+
+   Every rule here respecifies `transition`, because most of these elements
+   carry `transition: all`, and re-triggering that each frame smears the
+   animation into mush.
+   --------------------------------------------------------------------------- */
+
+.beat-on .showcase-card-inner {
+  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(calc(1 + var(--card-beat, 0) * 0.028))
+             rotate(calc(var(--card-beat, 0) * var(--card-tilt, 1deg)
+                         + var(--card-beat, 0) * var(--wob-a, 0) * 0.9deg));
+}
+
+.beat-on .showcase-card:nth-child(1) .showcase-card-inner { --card-beat: var(--beat-0, 0); --card-tilt: 0.5deg; }
+.beat-on .showcase-card:nth-child(2) .showcase-card-inner { --card-beat: var(--beat-1, 0); --card-tilt: -0.5deg; }
+.beat-on .showcase-card:nth-child(3) .showcase-card-inner { --card-beat: var(--beat-2, 0); --card-tilt: 0.5deg; }
+.beat-on .showcase-card:nth-child(4) .showcase-card-inner { --card-beat: var(--beat-3, 0); --card-tilt: -0.5deg; }
+
+.beat-on .showcase-glow {
+  transition: none;
+  opacity: calc(var(--card-beat, 0) * 0.6);
+}
+
+/* The name squashes and stretches like something heavy landing on it. These keep
+   their normal `display` so switching the music on never reflows the page; the
+   origin just moves the pivot to where left-aligned text actually starts. */
+.beat-on .name {
+  transition: none;
+  transform-origin: left center;
+  transform: scale(calc(1 + var(--beat-0, 0) * 0.07), calc(1 - var(--beat-0, 0) * 0.05))
+             rotate(calc(var(--beat-0, 0) * var(--wob-b, 0) * 2.5deg));
+}
+
+.beat-on .section-title {
+  transition: none;
+  transform-origin: left center;
+  transform: translateY(calc(var(--beat-0, 0) * -7px))
+             rotate(calc(var(--beat-1, 0) * var(--wob-c, 0) * 3.5deg));
+}
+
+.beat-on .site-logo {
+  transition: none;
+  transform: rotate(calc(var(--beat-0, 0) * var(--wob-b, 0) * 30deg))
+             scale(calc(1 + var(--beat-0, 0) * 0.22));
+}
+
+.beat-on .topnav-inner {
+  transition: none;
+  transform: translateY(calc(var(--beat-0, 0) * 4px))
+             rotate(calc(var(--beat-0, 0) * var(--wob-c, 0) * 1.4deg))
+             scale(calc(1 + var(--beat-0, 0) * 0.025));
+}
+
+.beat-on #themeToggle {
+  transition: top 0.5s cubic-bezier(0.22, 1, 0.36, 1), left 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: rotate(calc(var(--beat-1, 0) * var(--wob-a, 0) * 26deg));
+}
+
+.beat-on .wip-banner {
+  transition: none;
+  transform: translateX(calc(var(--beat-0, 0) * var(--wob-a, 0) * 4px))
+             rotate(calc(var(--beat-0, 0) * var(--wob-b, 0) * 1.3deg));
+}
+
+.beat-on .header-cta {
+  transition: none;
+  transform: translateY(calc(var(--beat-1, 0) * -5px))
+             rotate(calc(var(--beat-1, 0) * var(--wob-c, 0) * 7deg));
+}
+
+/* Icons spin opposite ways, which is the bit that reads as silly. */
+.beat-on .showcase-icon-wrapper {
+  transition: none;
+  transform: rotate(calc(var(--icon-beat, 0) * var(--wob-a, 0) * var(--icon-spin, 30deg)))
+             scale(calc(1 + var(--icon-beat, 0) * 0.26));
+}
+
+.beat-on .showcase-card:nth-child(odd) .showcase-icon-wrapper { --icon-beat: var(--beat-0, 0); --icon-spin: 32deg; }
+.beat-on .showcase-card:nth-child(even) .showcase-icon-wrapper { --icon-beat: var(--beat-1, 0); --icon-spin: -32deg; }
+
+.beat-on .showcase-badge {
+  transition: none;
+  transform: scale(calc(1 + var(--beat-2, 0) * 0.16))
+             rotate(calc(var(--beat-2, 0) * var(--wob-c, 0) * 11deg));
+}
+
+/* Tech pills ripple left-to-right in fours, each one jittering as it goes. */
+.beat-on .tech-pill {
+  transition: none;
+  transform: translateY(calc(var(--pill-beat, 0) * -7px))
+             rotate(calc(var(--pill-beat, 0) * var(--wob-a, 0) * 15deg));
+}
+
+.beat-on .tech-pill:nth-child(4n + 1) { --pill-beat: var(--beat-0, 0); }
+.beat-on .tech-pill:nth-child(4n + 2) { --pill-beat: var(--beat-1, 0); }
+.beat-on .tech-pill:nth-child(4n + 3) { --pill-beat: var(--beat-2, 0); }
+.beat-on .tech-pill:nth-child(4n + 4) { --pill-beat: var(--beat-3, 0); }
+
+.beat-on .timeline-item {
+  transition: none;
+  transform: translateX(calc(var(--row-beat, 0) * var(--wob-b, 0) * 11px));
+}
+
+.beat-on .timeline-item:nth-child(3n + 1) { --row-beat: var(--beat-0, 0); }
+.beat-on .timeline-item:nth-child(3n + 2) { --row-beat: calc(var(--beat-1, 0) * -1); }
+.beat-on .timeline-item:nth-child(3n + 3) { --row-beat: var(--beat-2, 0); }
+
+.beat-on .timeline-dot {
+  transition: none;
+  transform: scale(calc(1 + var(--beat-0, 0) * 0.8));
+}
+
+.beat-on .footer-social {
+  transition: none;
+  transform: translateY(calc(var(--social-beat, 0) * -10px))
+             rotate(calc(var(--social-beat, 0) * var(--wob-c, 0) * 26deg));
+}
+
+.beat-on .footer-social:nth-child(1) { --social-beat: var(--beat-0, 0); }
+.beat-on .footer-social:nth-child(2) { --social-beat: var(--beat-1, 0); }
+.beat-on .footer-social:nth-child(3) { --social-beat: var(--beat-2, 0); }
+.beat-on .footer-social:nth-child(4) { --social-beat: var(--beat-3, 0); }
+
+.beat-on .audio-toggle {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  transform: scale(calc(1 + var(--beat-0, 0) * 0.15))
+             rotate(calc(var(--beat-0, 0) * var(--wob-a, 0) * 24deg));
+}
+
+/* The intro, the secondary buttons and the modals, so nothing sits the song out. */
+.beat-on .subtitle {
+  transition: none;
+  transform-origin: left center;
+  transform: translateY(calc(var(--beat-1, 0) * -4px))
+             rotate(calc(var(--beat-1, 0) * var(--wob-c, 0) * 2deg));
+}
+
+.beat-on .about-card {
+  transition: none;
+  transform: scale(calc(1 + var(--beat-1, 0) * 0.014))
+             rotate(calc(var(--beat-1, 0) * var(--wob-b, 0) * 0.5deg));
+}
+
+.beat-on .about-highlight {
+  transition: none;
+  transform: translateY(calc(var(--hl-beat, 0) * -6px))
+             rotate(calc(var(--hl-beat, 0) * var(--wob-a, 0) * 7deg));
+}
+
+.beat-on .about-highlight:nth-child(odd) { --hl-beat: var(--beat-0, 0); }
+.beat-on .about-highlight:nth-child(even) { --hl-beat: var(--beat-2, 0); }
+
+.beat-on .about-highlight-logo {
+  transition: none;
+  transform: rotate(calc(var(--beat-0, 0) * var(--wob-b, 0) * 18deg));
+}
+
+/* transition stays: it only covers colour, so the transform is never smoothed */
+.beat-on .topnav-link {
+  transform: translateY(calc(var(--link-beat, 0) * -4px))
+             rotate(calc(var(--link-beat, 0) * var(--wob-a, 0) * 6deg));
+}
+
+.beat-on .topnav-link:nth-child(1) { --link-beat: var(--beat-0, 0); }
+.beat-on .topnav-link:nth-child(2) { --link-beat: var(--beat-1, 0); }
+.beat-on .topnav-link:nth-child(3) { --link-beat: var(--beat-2, 0); }
+
+.beat-on .section-action-btn,
+.beat-on .timeline-link {
+  transition: none;
+  transform: translateY(calc(var(--beat-2, 0) * -5px))
+             rotate(calc(var(--beat-2, 0) * var(--wob-c, 0) * 8deg));
+}
+
+.beat-on .showcase-link-text {
+  transition: none;
+  transform: translateX(calc(var(--beat-3, 0) * var(--wob-a, 0) * 5px));
+}
+
+.beat-on .showcase-arrow {
+  transition: none;
+  transform: rotate(calc(var(--beat-3, 0) * var(--wob-b, 0) * 22deg));
+}
+
+.beat-on .writings-hint {
+  transition: none;
+  transform: translateY(calc(var(--beat-0, 0) * -4px));
+}
+
+/* Modals: the panel itself is left alone, because it owns the open animation
+   (transform: scale(0.9) -> scale(1)). Its contents dance instead. */
+.beat-on .readme-modal-title {
+  transition: none;
+  transform-origin: left center;
+  transform: scale(calc(1 + var(--beat-0, 0) * 0.06))
+             rotate(calc(var(--beat-0, 0) * var(--wob-b, 0) * 2.5deg));
+}
+
+.beat-on .readme-modal-repo-link,
+.beat-on .readme-modal-close,
+.beat-on .image-modal-close {
+  transition: none;
+  transform: translateY(calc(var(--beat-1, 0) * -5px))
+             rotate(calc(var(--beat-1, 0) * var(--wob-c, 0) * 14deg));
+}
+
+.beat-on .readme-modal-body {
+  transition: none;
+  transform: scale(calc(1 + var(--beat-2, 0) * 0.012))
+             rotate(calc(var(--beat-2, 0) * var(--wob-a, 0) * 0.45deg));
+}
+
+/* Nobody who asked for less motion wants the page doing this. */
+@media (prefers-reduced-motion: reduce) {
+  .beat-on .subtitle,
+  .beat-on .about-card,
+  .beat-on .about-highlight,
+  .beat-on .about-highlight-logo,
+  .beat-on .topnav-link,
+  .beat-on .section-action-btn,
+  .beat-on .timeline-link,
+  .beat-on .showcase-link-text,
+  .beat-on .showcase-arrow,
+  .beat-on .writings-hint,
+  .beat-on .readme-modal-title,
+  .beat-on .readme-modal-repo-link,
+  .beat-on .readme-modal-close,
+  .beat-on .image-modal-close,
+  .beat-on .readme-modal-body {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beat-on .showcase-card-inner,
+  .beat-on .name,
+  .beat-on .section-title,
+  .beat-on .site-logo,
+  .beat-on .topnav-inner,
+  .beat-on #themeToggle,
+  .beat-on .wip-banner,
+  .beat-on .header-cta,
+  .beat-on .showcase-icon-wrapper,
+  .beat-on .showcase-badge,
+  .beat-on .tech-pill,
+  .beat-on .timeline-item,
+  .beat-on .timeline-dot,
+  .beat-on .footer-social,
+  .beat-on .audio-toggle {
+    transform: none;
+  }
+
+  .beat-on .showcase-glow {
+    opacity: 0;
+  }
+}
